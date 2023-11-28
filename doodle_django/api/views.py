@@ -130,7 +130,7 @@ def api_feedback_create(request):
     serializer = FeedbackSerializer(data=data, context={'user': request.user})
     if serializer.is_valid():
         feedback = serializer.save()
-        for file in request.FILES:
+        for file in request.FILES.values():
             print(file)
             FeedbackAttachment.objects.create(
                 feedback_id=feedback,
