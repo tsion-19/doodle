@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils.timezone import *
+from django.contrib.auth import get_user_model
 
 from datetime import timedelta
+
 
 class VideoType(models.Model):
     id = models.AutoField(
@@ -125,3 +127,56 @@ class Vote(models.Model):
         to=TimeSlot,
         on_delete=models.CASCADE
     )
+
+class Feedback(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column="id"
+    )
+    name = models.CharField(
+        db_column="name",
+        max_length=20,
+        blank=False,
+        null=False,
+    )
+    message = models.CharField(
+        db_column="message",
+        max_length=1500,
+        blank=False,
+        null=False,
+    )
+    creation_date = models.DateTimeField(
+        db_column="creation_date",
+        auto_now_add=True
+    )
+    email = models.EmailField(
+        db_column="email",
+        blank=True,
+        null=True
+    )
+    user_id = models.ForeignKey(
+        get_user_model(),
+        db_column="user_id",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+
+class FeedbackAttachment(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column="id"
+    )
+    feedback_id = models.ForeignKey(
+        Feedback,
+        db_column="feedback_id",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    file = models.FileField(
+        upload_to="feedback/",
+        db_column="file"
+    )
+
+

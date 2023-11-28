@@ -124,3 +124,20 @@ def api_meetings_delete(request, meeting_id):
     meeting.delete()
     return JsonResponse({'message': 'Meeting deleted successfully'}, status=204)
 
+@api_view(['POST'])
+def api_feedback_create(request):
+    data = request.data
+    serializer = FeedbackSerializer(data=data, context={'user': request.user})
+    if serializer.is_valid():
+        feedback = serializer.save()
+        for file in request.FILES:
+            print(file)
+            FeedbackAttachment.objects.create(
+                feedback_id=feedback,
+                file=file
+            )
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+    
+
