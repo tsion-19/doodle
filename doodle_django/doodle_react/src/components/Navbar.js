@@ -9,6 +9,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import "./navbar.css";
 
 function Navbar() {
   const settings = [
@@ -55,7 +56,8 @@ function Navbar() {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
+              onClose={handleCloseUserMenu}
+            >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>

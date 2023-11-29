@@ -19,7 +19,7 @@ staticfiles
 
 # AWS User-specific
 .idea/**/aws.xml
-
+.package-lock.json
 # Generated files
 .idea/**/contentModel.xml
 

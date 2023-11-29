@@ -1,0 +1,30 @@
+.navbar {
+  padding-left: 50px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Optional, to align items vertically */
+}
+.img {
+  height: 30px;
+  width: 30px;
+}
+
+
+.navbar h1 {
+  color: #0f0e0e;
+}
+
+.navbar .links {
+  margin-left: auto;
+}
+
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+
+.navbar a:hover {
+  color: #000000;
+}
