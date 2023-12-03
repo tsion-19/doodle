@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Creation from "./pages/Creation";
 import Manage from "./pages/Manage";
 import Dashboard from "./pages/Dashboard";
+import Preference from "./pages/Preference";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/create" element={<Creation />} />
           <Route path="/manage" element={<Manage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/preference" element={<Preference />} />
         </Routes>
       </Router>{" "}
     </div>

@@ -328,3 +328,30 @@ class MeetingTests(APITestCase):
         response = self.client.put(url, invalid_data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_meeting_timeslots_successfully(self):
+        self.test_create_meeting_successfully()
+        self.assertIsNotNone(getattr(self, 'created_meeting_id', None), "created_meeting_id not set")
+        updated_data = {
+            "timeslots": [{
+                "start_date": "2023-12-21T09:00:00+01:00",
+                "end_date": "2023-12-21T10:00:00+01:00"}],
+        }
+        url = reverse('api:api_meeting_timeslots', args=[self.created_meeting_id])
+        response = self.client.put(url, updated_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_meeting_timeslots_unsuccessfully(self):
+        self.test_create_meeting_successfully()
+        self.assertIsNotNone(getattr(self, 'created_meeting_id', None), "created_meeting_id not set")
+        
+        invalid_data = {
+            "timeslots": [{
+                "start_dat": "2023-12-21T09:00:00+01:00",
+                "end_date": "2023-12-21T10:00:00+01:00"}], 
+        }
+        
+        url = reverse('api:api_meeting_timeslots', args=[self.created_meeting_id])
+        response = self.client.put(url, invalid_data, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

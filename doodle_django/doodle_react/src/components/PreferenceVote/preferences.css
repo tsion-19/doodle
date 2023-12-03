@@ -1,0 +1,14 @@
+.questions_answers > .question {
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.questions_answers > .answer {
+  font-style: italic;
+  margin-top: 0px;
+}
+
+.border_image {
+  border-radius: 5px;
+  width: -webkit-fill-available;
+}

@@ -254,6 +254,7 @@ const CreateGroupPolly = ({ news }) => {
       // console.log("sth failed", e);
     }
   };
+
   const handleButtonClick = (e) => {
     e.preventDefault();
     if (checkRequirements()) {
