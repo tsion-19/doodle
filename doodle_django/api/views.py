@@ -57,6 +57,57 @@ def api_meeting_book(request, meeting_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Meeting.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST', 'PUT'])
+def api_meeting_timeslots(request, meeting_id):
+    try:
+        meeting = get_object_or_404(Meeting, pk=meeting_id)
+
+        serializer = MeetingSerializer(meeting, data={'final_date': request.data.get('final_date')}, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Meeting.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST', 'PUT'])
+def api_meeting_timeslots(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    
+    data = request.data
+    timeslots = data.pop("timeslots", [])
+    
+    print(timeslots)
+
+    meeting_serializer = MeetingSerializer(meeting, data=data, partial=True)
+
+    if not meeting_serializer.is_valid():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=meeting_serializer.errors)
+
+    meeting = meeting_serializer.save()
+
+    timeslot_serializer = TimeSlotSerializer(data=timeslots, many=True)
+
+    if not timeslot_serializer.is_valid():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=timeslot_serializer.errors)
+
+    timeslots_data = timeslot_serializer.data
+    for ts_data in timeslots_data:
+        ts_data["schedule_pool_id"] = SchedulePool.objects.create(
+            meeting=meeting,
+            voting_start_date=meeting.creation_date,
+            voting_deadline=meeting.deadline
+        )
+
+    timeslots = TimeSlot.objects.bulk_create(
+        map(lambda item: TimeSlot(**item), timeslots_data)
+    )
+
+    meeting.timeslots = timeslots
+    return Response(status=status.HTTP_200_OK, data=MeetingTimeSlotSerializer(meeting).data)
 
 @api_view(['POST'])
 def api_meetings_create(request):

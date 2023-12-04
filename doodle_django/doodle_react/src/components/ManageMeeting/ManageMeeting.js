@@ -12,6 +12,7 @@ import { grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 // import * as React from "react";
 import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import "./manage.css";
 import axios from "axios";
@@ -19,6 +20,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditableMeeting from "./EditMeetingForm";
 import DeleteConfirmation from "./DeleteConfirmation";
+import { Navigate } from "react-router-dom";
 
 const ManageMeeting = ({ data }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -54,6 +56,8 @@ const ManageMeeting = ({ data }) => {
     setShowDeleteConfirmation(false);
   };
 
+  let navigate = useNavigate();
+
   const handleConfirmDelete = async () => {
     try {
       // Perform the deletion logic immediately
@@ -74,6 +78,9 @@ const ManageMeeting = ({ data }) => {
           color: "white",
         },
       });
+
+      navigate("/dashboard");
+
       // After deletion, hide the confirmation box
       // After deletion, hide the confirmation box
       setShowDeleteConfirmation(false);
