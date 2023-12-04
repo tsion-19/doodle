@@ -11,23 +11,38 @@ import {
 } from "@mui/material";
 import "./navbar.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function Navbar() {
+  const location = useLocation();
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+
   const settings = [
     { id: "1", title: "home", link: "/" },
     { id: "2", title: "Dashboard", link: "/dashboard" },
-    { id: "3", title: "Register", link: "/register" },
-    { id: "4", title: "login", link: "/login" },
+    {
+      id: "3",
+      title: isLoggedIn ? "Logout" : "Register",
+      link: isLoggedIn ? "/logout" : "/register",
+    },
   ];
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    // Clear token and any other user-related data
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isLoggedIn");
+    // Redirect to the home page
+    window.location.href = "/";
   };
   return (
     <div className="navbar">
@@ -60,7 +75,14 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting.id}
+                  onClick={
+                    setting.title === "Logout"
+                      ? handleLogout
+                      : handleCloseUserMenu
+                  }
+                >
                   <Link to={setting.link}>
                     <Typography textAlign="center">{setting.title}</Typography>
                   </Link>
