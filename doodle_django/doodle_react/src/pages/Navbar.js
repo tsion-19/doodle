@@ -10,13 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import "./navbar.css";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const settings = [
-    "Dashboard",
-    "Account Setting",
-    "Help and Support",
-    "logout",
+    { id: "1", title: "home", link: "/" },
+    { id: "2", title: "Dashboard", link: "/dashboard" },
+    { id: "3", title: "Register", link: "/register" },
+    { id: "4", title: "login", link: "/login" },
   ];
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -30,9 +31,9 @@ function Navbar() {
   };
   return (
     <div className="navbar">
-      <h1 style={{ color: "#585858 " }}>
-        <img className="img" src="/doodle-favicon.svg" alt="imag" />
-        Doodle
+      <h1 style={{ color: "#00000 " }}>
+        <img className="img" src="/unical.png" alt="imag" />
+        Doodle Unical
       </h1>
       <div className="profile">
         <Toolbar>
@@ -59,8 +60,10 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
+                  <Link to={setting.link}>
+                    <Typography textAlign="center">{setting.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
               {/* <Link to="/login">
