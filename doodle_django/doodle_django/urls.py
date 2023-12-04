@@ -24,6 +24,5 @@ from django.shortcuts import render
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls", namespace="api")),
-    re_path(r"^$", lambda request : render(request, "index.html")),
     re_path(r"^(?:.*)/?$", lambda request: render(request, "index.html")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

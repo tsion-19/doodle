@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import styled from 'styled-components';
+import FeedbackModal from "./FeedbackModal";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Background = styled.div`
@@ -14,12 +15,18 @@ const Background = styled.div`
 `;
 
 const StyledForm = styled(Form)`
-  background-color: #ffffff; /* Form background color */
+  background-color: #ffffff;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Box shadow effect */
-  max-width: 1300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 1000px;
   width: 100%;
+`;
+
+const CenteredContainer = styled.div`
+  display: grid;
+  place-items: center;
+  height: 100%;
 `;
 
 const FeedbackForm = () => {
@@ -29,18 +36,28 @@ const FeedbackForm = () => {
     const [message, setMessage] = useState('');
     
     const handleFileChange = (e) => {
-      // Access the uploaded files from the input field
       setSelectedFiles(selectedFiles => [...selectedFiles, e.target.files[0]]);
     };
     
-    const csrftoken = () => Cookies.get('csrftoken');
-    const getToken = () => sessionStorage.getItem("token");
+    const navigate = useNavigate();
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setmodalMessage] = useState("Message");
+    const [redirect, setRedirect] = useState(false);
+
+    const handleOpenModal = () => {
+      setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+      setShowModal(false);
+      if(redirect) {
+        navigate('/');
+      }
+    };
     
     const handleFormSubmit = (e) => {
       e.preventDefault();
-      // Process the selected files here (e.g., send them to the server)
-      // For demonstration purposes, you can log the file details
-      console.log('Selected Files:', selectedFiles);
       const data = new FormData();
       
       data.append('name', name);
@@ -57,16 +74,17 @@ const FeedbackForm = () => {
         data,
         {
           headers: {
-            'authorization': `Token ${getToken()}`,
             'Content-type': 'multipart/form-data',
             'withCredentials': true,
-            'X-CSRFTOKEN': csrftoken(),
           },
         }
         ).then(response => {
-          console.log(response);
+          setmodalMessage("SUCCESS");
+          setRedirect(true);
+          handleOpenModal();
         }).catch(error => {
-          console.log(error);
+          setmodalMessage("FAIL");
+          handleOpenModal();
         });
       };
       
@@ -74,43 +92,55 @@ const FeedbackForm = () => {
 
   return (
     <Background>
+      <FeedbackModal show={showModal} message={modalMessage} onHide={handleCloseModal} />
       <Container>
-        <StyledForm encType="multipart/form-data" onSubmit={handleFormSubmit}>
-          <h2 className="text-center mb-4">Submit Feedback</h2>
-          <Form.Group className="mt-4">
-            <Form.Label htmlFor="name">Name</Form.Label>
-            <Form.Control type="text"
+        <CenteredContainer>
+          <StyledForm encType="multipart/form-data" onSubmit={handleFormSubmit}>
+            <h2 className="text-center mb-4">Submit Feedback</h2>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="name">Name</Form.Label>
+              <Form.Control
+                type="text"
+                required
                 placeholder="Enter your name"
-                onChange={(event) =>setName(event.target.value)}/>
-            <Form.Text className="text-muted"></Form.Text>
-          </Form.Group>
-          <Form.Group className="mt-4">
-            <Form.Label htmlFor="email">Email address</Form.Label>
-            <Form.Control type="email"
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="email">Email address</Form.Label>
+              <Form.Control
+                type="email"
+                required
                 placeholder="Enter email"
-                onChange={(event) =>setEmail(event.target.value)}/>
-            <Form.Text className="text-muted"></Form.Text>
-          </Form.Group>
-          <Form.Group className="mt-4">
-            <Form.Label htmlFor="message">Message</Form.Label>
-            <Form.Control type="text"
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="message">Message</Form.Label>
+              <Form.Control
                 as="textarea"
+                required
                 rows={3}
                 placeholder="Enter message"
-                onChange={(event) =>setMessage(event.target.value)}/>
-            <Form.Text className="text-muted" rows={3}></Form.Text>
-          </Form.Group>
-          <Form.Group className="mt-4">
-            <Form.Label htmlFor="files">Upload files</Form.Label>
-            <Form.Control type="file"
-                multiple
-                onChange={handleFileChange}/>
-                <ul className="mt-4">
-                {files.map((file, i) => (<li className="pt-2" key={i}>{file.name} ({file.size / 1000} KBs)</li>))}
-                </ul>
-          </Form.Group>
-          <Button className="mt-4 btn-lg" variant="success" type="submit">Submit</Button>
-        </StyledForm>
+                onChange={(event) => setMessage(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="files">Upload files</Form.Label>
+              <Form.Control type="file" multiple onChange={handleFileChange} />
+              <ul className="mt-2">
+                {files.map((file, i) => (
+                  <li key={i}>{file.name} ({(file.size / 1000).toFixed(2)} KBs)</li>
+                ))}
+              </ul>
+            </Form.Group>
+            <div className="d-grid">
+              <Button variant="success" size="lg" type="submit">
+                Submit
+              </Button>
+            </div>
+          </StyledForm>
+        </CenteredContainer>
       </Container>
     </Background>
   );
