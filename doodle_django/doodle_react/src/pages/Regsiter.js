@@ -104,7 +104,7 @@ const Register = () => {
         <div style={{ mx: 100 }}>
           <Button
             type="submit"
-            color="primary"
+            color="grey"
             variant="contained"
             size="large"
             fullWidth
