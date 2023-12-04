@@ -18,16 +18,7 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Regsiter";
 import Login from "./pages/Login";
 
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//     <ToastContainer />
-//   </React.StrictMode>,
-//   document.getElementById("root")
-// );
 function App() {
-  // const token = sessionStorage.getItem("token");
-  // console.log(token);
   const location = useLocation();
   const token = sessionStorage.getItem("token");
   console.log(token);
