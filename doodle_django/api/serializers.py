@@ -6,6 +6,26 @@ from django.core.validators import *
 from . models import *
 from django.contrib.auth import get_user_model,authenticate
 
+class TimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['start_date', 'end_date', 'preference']
+
+class ParticipantPreferenceSerializer(serializers.ModelSerializer):
+    selected_timeslots = TimeSlotSerializer(many=True)
+
+    class Meta:
+        model = ParticipantPreference
+        fields = ['selected_timeslots']
+
+    def create(self, validated_data):
+        selected_timeslots_data = validated_data.pop('selected_timeslots')
+        instance = ParticipantPreference.objects.create(**validated_data)
+
+        for time_slot_data in selected_timeslots_data:
+            instance.selected_timeslots.create(**time_slot_data)
+
+        return instance
 # UserModel = get_user_model()
 
 # class UserSerializer(serializers.ModelSerializer):

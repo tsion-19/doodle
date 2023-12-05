@@ -199,3 +199,77 @@ def api_feedback_create(request):
         return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
     
 
+@api_view(['POST'])
+def api_participant_preference_create(request):
+    if request.method == 'POST':
+        data = request.data.copy()
+
+        # Extract time slots and format them
+        selected_timeslots = data.get('selected_timeslots', [])
+        formatted_timeslots = [
+            {
+                "start_date": slot.get("start_date"),
+                "end_date": slot.get("end_date"),
+                "preference": slot.get("preference", ParticipantPreference.YES),
+            }
+            for slot in selected_timeslots
+        ]
+        data['selected_timeslots'] = formatted_timeslots
+
+        serializer = ParticipantPreferenceSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+# class UserRegister(APIView):
+# 	permission_classes = (permissions.AllowAny,)
+# 	def post(self, request):
+# 		clean_data = custom_validation(request.data)
+# 		serializer = UserRegisterSerializer(data=clean_data)
+# 		if serializer.is_valid(raise_exception=True):
+# 			user = serializer.create(clean_data)
+# 			if user:
+# 				return Response(serializer.data, status=status.HTTP_201_CREATED)
+# 		return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# class UserLogin(APIView):
+# 	permission_classes = (permissions.AllowAny,)
+# 	authentication_classes = (SessionAuthentication,)
+# 	##
+# 	def post(self, request):
+# 		data = request.data
+# 		assert validate_email(data)
+# 		assert validate_password(data)
+# 		serializer = UserLoginSerializer(data=data)
+# 		if serializer.is_valid(raise_exception=True):
+# 			user = serializer.check_user(data)
+# 			login(request, user)
+# 			return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# class UserLogout(APIView):
+# 	permission_classes = (permissions.AllowAny,)
+# 	authentication_classes = ()
+# 	def post(self, request):
+# 		logout(request)
+# 		return Response(status=status.HTTP_200_OK)
+
+
+# class UserView(APIView):
+# 	permission_classes = (permissions.IsAuthenticated,)
+# 	authentication_classes = (SessionAuthentication,)
+# 	##
+# 	def get(self, request):
+# 		serializer = UserSerializer(request.user)
+# 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+
+# @api_view(['POST'])
+# def register_user(request):
+#     if request.method == 'POST':
+#         serializer = UserSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
