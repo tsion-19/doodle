@@ -4,30 +4,32 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import FeedbackModal from "./FeedbackModal";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import { Helmet } from "react-helmet";
+//import "bootstrap/dist/css/bootstrap.min.css";
 
-// const Background = styled.div`
-//   height: 100vh;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   background: linear-gradient(to bottom right, #ffcc00, #ff6699, #9966ff, #00ccff);
-// `;
+const Background = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff
+  );
+`;
 
-// const StyledForm = styled(Form)`
-//   background-color: #ffffff;
-//   padding: 40px;
-//   border-radius: 10px;
-//   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-//   max-width: 1000px;
-//   width: 100%;
-// `;
+const StyledForm = styled(Form)`
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 1000px;
+  width: 100%;
+`;
 
-// const CenteredContainer = styled.div`
-//   display: grid;
-//   place-items: center;
-//   height: 100%;
-// `;
+const CenteredContainer = styled.div`
+  display: grid;
+  place-items: center;
+  height: 100%;
+`;
 
 const FeedbackForm = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -89,15 +91,21 @@ const FeedbackForm = () => {
   const files = selectedFiles ? [...selectedFiles] : [];
 
   return (
-    <div id="background_div">
+    <Background>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"
+      />
       <FeedbackModal
         show={showModal}
         message={modalMessage}
         onHide={handleCloseModal}
       />
       <Container>
-        <div id="CenteredContainer">
-          <div id="StyledForm" onSubmit={handleFormSubmit}>
+        <CenteredContainer>
+          <StyledForm encType="multipart/form-data" onSubmit={handleFormSubmit}>
             <h2 className="text-center mb-4">Submit Feedback</h2>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="name">Name</Form.Label>
@@ -143,10 +151,10 @@ const FeedbackForm = () => {
                 Submit
               </Button>
             </div>
-          </div>
-        </div>
+          </StyledForm>
+        </CenteredContainer>
       </Container>
-    </div>
+    </Background>
   );
 };
 

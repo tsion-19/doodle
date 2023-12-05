@@ -53,16 +53,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
-CORS_ALLOWED_APPS = [
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-]
-
 CSRF_COOKIE_HTTPONLY = False
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
-]
+CSRF_COOKIE_SECURE = False
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 # Application definition
 
@@ -75,21 +70,21 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     #third party
     "rest_framework",
-    'rest_framework.authtoken',
-    'allauth',
-    'allauth.account',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
     "corsheaders",
+    #login
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    "allauth",
+    "allauth.account",
+    "rest_framework.authtoken",
     #app
     "doodle_react",
     "api",
-    'django.contrib.sites',
+    
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    'allauth.account.middleware.AccountMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -98,6 +93,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'django.middleware.common.CommonMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "doodle_django.urls"
@@ -134,9 +130,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
-
-# AUTH_USER_MODEL = 'api.AppUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -182,10 +175,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',  # Use application/json instead of multipart/form-data requests
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny',],
@@ -195,6 +184,5 @@ REST_FRAMEWORK = {
     ]
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"

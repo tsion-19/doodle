@@ -1,10 +1,8 @@
-import FeedbackForm from "../components/Feedback/FeedbackForm"
+import FeedbackForm from "../components/Feedback/FeedbackForm";
 
 function Feedback() {
-    // ...
-    return(
-      <FeedbackForm />
-    )
-  }
+  // ...
+  return <FeedbackForm />;
+}
 
 export default Feedback;

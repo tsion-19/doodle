@@ -3,13 +3,14 @@ import { Box, Checkbox } from "@mui/material";
 import user from "../images/user.png";
 import "../ManageMeeting/manage.css";
 import EnterNameAndEmail from "./SubmitVote";
+import axios from "axios";
 
 const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
   const time_slots = [
     {},
     ...(Array.isArray(data["timeslots"]) ? data["timeslots"] : []),
   ];
-  
+
   const [checkboxValues, setCheckboxValues] = useState(
     Array.from({ length: time_slots.length }, () => false)
   );
@@ -21,48 +22,49 @@ const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
   const [currentStep, setCurrentStep] = useState("selectTimeSlot");
   const handleCheckboxToggle = (index) => {
     setCheckboxValues((prevValues) => {
-        const newValues = [...prevValues];
-        const currentValue = newValues[index];
+      const newValues = [...prevValues];
+      const currentValue = newValues[index];
 
-        // Toggle checkbox value
-        newValues[index] =
-            currentValue === false ? true : currentValue === true ? 'maybe' : false;
+      // Toggle checkbox value
+      newValues[index] =
+        currentValue === false ? true : currentValue === true ? "maybe" : false;
 
-        console.log('New Checkbox Values:', newValues);
+      console.log("New Checkbox Values:", newValues);
 
-        return newValues;
+      return newValues;
     });
 
     // Construct the selectedDates array based on checkbox values
     const newSelectedDates = time_slots.reduce((acc, time_slot, i) => {
-        if (checkboxValues[i] === true || checkboxValues[i] === 'maybe') {
-            acc.push({
-                start_date: time_slot.start_date,
-                end_date: time_slot.end_date,
-                preference: checkboxValues[i] === true ? 'yes' : 'maybe',
-            });
-        }
-        return acc;
+      if (checkboxValues[i] === true || checkboxValues[i] === "maybe") {
+        acc.push({
+          start_date: time_slot.start_date,
+          end_date: time_slot.end_date,
+          preference: checkboxValues[i] === true ? "yes" : "maybe",
+        });
+      }
+      return acc;
     }, []);
 
     setSelectedDates(newSelectedDates);
 
-    console.log('New Selected Dates:', newSelectedDates);
-};
+    console.log("New Selected Dates:", newSelectedDates);
+  };
 
+  const handleContinue = () => {
+    // Check if there is at least one "Yes" or "Maybe" selected
+    const hasYesOrMaybe = checkboxValues.some(
+      (value) => value === true || value === "maybe"
+    );
 
-const handleContinue = () => {
-  // Check if there is at least one "Yes" or "Maybe" selected
-  const hasYesOrMaybe = checkboxValues.some(value => value === true || value === 'maybe');
-
-  if (hasYesOrMaybe) {
+    if (hasYesOrMaybe) {
       setCurrentStep("enterNameAndEmail");
-  } else {
-      alert("Please select at least one 'Yes' or 'Maybe' time slot before continuing.");
-  }
-};
-
-  
+    } else {
+      alert(
+        "Please select at least one 'Yes' or 'Maybe' time slot before continuing."
+      );
+    }
+  };
 
   const handleCancel = () => {
     setCheckboxValues(Array.from({ length: time_slots.length }, () => false));
@@ -70,47 +72,63 @@ const handleContinue = () => {
     setCurrentStep("selectTimeSlot");
   };
 
-const handleSubmit = async () => {
-  const preferences = {
+  const handleSubmit = async () => {
+    const preferences = {
       selected_timeslots: selectedDates.map((date, index) => ({
-          start_date: date.start_date,
-          end_date: date.end_date,
-          preference: checkboxValues[index] === true ? 'yes' : checkboxValues[index] || 'no',
+        start_date: date.start_date,
+        end_date: date.end_date,
+        preference:
+          checkboxValues[index] === true
+            ? "yes"
+            : checkboxValues[index] || "no",
       })),
-  };
+    };
 
-  console.log('Submitting Preferences:', preferences);  // Log the preferences being submitted
+    console.log("Submitting Preferences:", preferences); // Log the preferences being submitted
 
-  try {
-      const response = await fetch("http://localhost:8000/api/preferences/", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(preferences),
+    axios
+      .post("http://127.0.0.1:8000/api/participant-preference/", preferences, {
+        headers: {
+          "Content-type": "multipart/form-data",
+          withCredentials: true,
+        },
+      })
+      .then((response) => {
+        alert("OK");
+      })
+      .catch((error) => {
+        alert("NO");
       });
 
-      if (response.ok) {
-          console.log("Preferences submitted successfully!");
-      } else {
-          console.error("Failed to submit preferences:", response.statusText);
-          console.log("Response Status:", response.status);
-          console.log("Response Body:", await response.json());
-          console.log("Submitted Preferences:", preferences);
-      }
-  } catch (error) {
-      console.error("An unexpected error occurred:", error.message);
-  }
+    // try {
+    //     const response = await fetch("http://localhost:8000/api/preferences/", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(preferences),
+    //     });
 
-  // Reset state after submission
-  setCheckboxValues(Array.from({ length: time_slots.length }, () => false));
-  setSelectedDates([]);
-  setUserName("");
-  setUserEmail("");
-  setCurrentStep("selectTimeSlot");
-};
+    //     if (response.ok) {
+    //         console.log("Preferences submitted successfully!");
+    //     } else {
+    //         console.error("Failed to submit preferences:", response.statusText);
+    //         console.log("Response Status:", response.status);
+    //         console.log("Response Body:", await response.json());
+    //         console.log("Submitted Preferences:", preferences);
+    //     }
+    // } catch (error) {
+    //     console.error("An unexpected error occurred:", error.message);
+    // }
 
-  
+    // Reset state after submission
+    setCheckboxValues(Array.from({ length: time_slots.length }, () => false));
+    setSelectedDates([]);
+    setUserName("");
+    setUserEmail("");
+    setCurrentStep("selectTimeSlot");
+  };
+
   return (
     <div>
       {currentStep === "selectTimeSlot" && (
@@ -126,8 +144,7 @@ const handleSubmit = async () => {
               width: "-webkit-fill-available",
               marginRight: "15px",
               marginLeft: "15px",
-            }}
-          >
+            }}>
             <thead>
               <tr>
                 {time_slots &&
@@ -138,8 +155,7 @@ const handleSubmit = async () => {
                       onClick={() => columnSelection(index)}
                       className={
                         selectedColumn === index ? "selected_column" : ""
-                      }
-                    >
+                      }>
                       {index === 0 ? (
                         <label
                           style={{
@@ -147,8 +163,7 @@ const handleSubmit = async () => {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                          }}
-                        ></label>
+                          }}></label>
                       ) : (
                         <label>
                           <br />
@@ -159,28 +174,30 @@ const handleSubmit = async () => {
                               .reverse()
                               .join("/")}
                           </p>
-                          <p>
-                            {time_slots[index]?.start_date.split("T")[1]}
-                          </p>
+                          <p>{time_slots[index]?.start_date.split("T")[1]}</p>
                           <p>{time_slots[index]?.end_date.split("T")[1]}</p>
                           <div className="div_user">
                             <img src={user} alt="user" />
                             <nobr> 2</nobr>
                           </div>
-                          
-                          <br/>
+
+                          <br />
                           <Checkbox
-                              onChange={() => handleCheckboxToggle(index)}
-                              checked={checkboxValues[index] === true}
-                              indeterminate={checkboxValues[index] === 'maybe'}
-                              style={{
-                                backgroundColor: checkboxValues[index] === true ? 'green' :
-                                                  checkboxValues[index] === 'maybe' ? 'yellow' : 'transparent',
-                                                  padding: '1px', // Adjust padding as needed
-                                                  borderRadius: '1px', // Add border radius for rounded corners  // Add other styles as needed
-                              }}
+                            onChange={() => handleCheckboxToggle(index)}
+                            checked={checkboxValues[index] === true}
+                            indeterminate={checkboxValues[index] === "maybe"}
+                            style={{
+                              backgroundColor:
+                                checkboxValues[index] === true
+                                  ? "green"
+                                  : checkboxValues[index] === "maybe"
+                                  ? "yellow"
+                                  : "transparent",
+                              padding: "1px", // Adjust padding as needed
+                              borderRadius: "1px", // Add border radius for rounded corners  // Add other styles as needed
+                            }}
                           />
-                             <br />
+                          <br />
                           <Checkbox disabled checked />
                         </label>
                       )}
@@ -197,15 +214,17 @@ const handleSubmit = async () => {
             <tbody></tbody>
           </table>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-          <button onClick={handleCancel}>Decline</button>
-          <button  onClick={handleSubmit}>Submit</button>
-        </div>
-
-
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "20px",
+            }}>
+            <button onClick={handleCancel}>Decline</button>
+            <button onClick={handleSubmit}>Submit</button>
+          </div>
         </>
       )}
-
     </div>
   );
 };
