@@ -8,6 +8,10 @@
   margin-top: 0px;
 }
 
+.questions_answers {
+  padding-left: 15px;
+}
+
 .border_image {
   border-radius: 5px;
   width: -webkit-fill-available;

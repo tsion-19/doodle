@@ -14,6 +14,7 @@ import "./preferences.css";
 import schedule from "../images/schedule.jpg";
 import bad_schedule from "../images/bad_schedule.jpg";
 import axios from "axios";
+import "../CreationMeeting/createGroup.css";
 
 const PreferenceVoteContainer = ({ news, data }) => {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -199,13 +200,13 @@ const PreferenceVoteContainer = ({ news, data }) => {
                 </Grid>
               </Box>
               <ColorButton2
-                style={{ marginTop: 20, marginBottom: 20 }}
+                style={{ marginTop: 20, marginBottom: 20, marginLeft: 15 }}
                 onClick={buttonShowYourPreference}
                 variant="contained">
                 Propose your timeslots
               </ColorButton2>
               {showYourPreference ? (
-                <div>
+                <div style={{ paddingLeft: 15 }}>
                   <OurCalendar
                     selectedDates={selectedDates}
                     setSelectedDates={setSelectedDates}
