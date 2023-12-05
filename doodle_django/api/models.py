@@ -130,9 +130,28 @@ class Vote(models.Model):
         on_delete=models.CASCADE
     )
 
+class CustomTimeSlot(models.Model):
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    preference = models.CharField(max_length=10, default='yes')
+    participant_preference = models.ForeignKey('ParticipantPreference', related_name='time_slots', on_delete=models.CASCADE)
 
+class ParticipantPreference(models.Model):
+    YES = 'yes'
+    MAYBE = 'maybe'
+    NO = 'no'
 
+    PREFERENCE_CHOICES = [
+        (YES, 'Yes'),
+        (MAYBE, 'Maybe'),
+        (NO, 'No'),
+    ]
 
+    selected_timeslots = models.ManyToManyField(TimeSlot)
+    preference = models.CharField(
+        max_length=10, choices=PREFERENCE_CHOICES, default=YES
+
+    )
 # class AppUserManager(BaseUserManager):
 #     def create_user(self, email, username, password=None):
 #         if not email:

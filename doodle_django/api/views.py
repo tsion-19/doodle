@@ -183,7 +183,28 @@ def api_meetings_delete(request, meeting_id):
     return JsonResponse({'message': 'Meeting deleted successfully'}, status=204)
 
 
+@api_view(['POST'])
+def api_participant_preference_create(request):
+    if request.method == 'POST':
+        data = request.data.copy()
 
+        # Extract time slots and format them
+        selected_timeslots = data.get('selected_timeslots', [])
+        formatted_timeslots = [
+            {
+                "start_date": slot.get("start_date"),
+                "end_date": slot.get("end_date"),
+                "preference": slot.get("preference", ParticipantPreference.YES),
+            }
+            for slot in selected_timeslots
+        ]
+        data['selected_timeslots'] = formatted_timeslots
+
+        serializer = ParticipantPreferenceSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 # class UserRegister(APIView):
 # 	permission_classes = (permissions.AllowAny,)
