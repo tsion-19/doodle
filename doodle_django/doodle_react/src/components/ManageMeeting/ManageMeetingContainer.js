@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Manage = ({ news, data }) => {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -22,6 +23,8 @@ const Manage = ({ news, data }) => {
   }));
 
   const getToken = () => sessionStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   const submitForm = async () => {
     let variable = null;
@@ -42,7 +45,7 @@ const Manage = ({ news, data }) => {
         }
       );
       alert("Timeslot booked!");
-      window.location.reload();
+      navigate("/dashboard");
     } catch (e) {
       // console.log("sth failed", e);
     }

@@ -22,7 +22,7 @@ function Welcome() {
       id: "3",
       title: "Booking Page",
       content: "book group poll",
-      link: "/create",
+      link: "/register",
     },
   ];
 
@@ -48,9 +48,6 @@ function Welcome() {
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Typography component="div" variant="h4">
               Welcome to Doodle Unical
-            </Typography>
-            <Typography variant="h4" color="text.secondary" component="div">
-              User
             </Typography>
           </CardContent>
           <Box

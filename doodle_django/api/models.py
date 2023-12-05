@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.timezone import *
 
 from datetime import timedelta
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import Group, Permission
+
 
 class VideoType(models.Model):
     id = models.AutoField(
@@ -125,3 +129,51 @@ class Vote(models.Model):
         to=TimeSlot,
         on_delete=models.CASCADE
     )
+
+
+
+
+# class AppUserManager(BaseUserManager):
+#     def create_user(self, email, username, password=None):
+#         if not email:
+#             raise ValueError('An email is required.')
+#         if not username:
+#             raise ValueError('A username is required.')
+#         if not password:
+#             raise ValueError('A password is required.')
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, username=username)
+#         user.set_password(password)
+#         user.save()
+#         return user
+
+# class AppUserManager(BaseUserManager):
+#     def create_user(self, email, username, password=None, **extra_fields):
+#         if not email:
+#             raise ValueError('An email is required.')
+#         if not username:
+#             raise ValueError('A username is required.')
+#         if not password:
+#             raise ValueError('A password is required.')
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, username=username, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+
+#     def create_superuser(self, email, password=None, **extra_fields):
+#         if not email:
+#             raise ValueError('An email is required.')
+#         if not password:
+#             raise ValueError('A password is required.')
+#         user = self.create_user(email, password=password, **extra_fields)
+#         user.is_superuser = True
+#         user.save(using=self._db)
+#         return user
+
+
+
+# class User(models.Model):
+#     username = models.CharField(max_length=50, unique=True)
+#     email = models.EmailField(unique=True)
+#     password = models.CharField(max_length=100)

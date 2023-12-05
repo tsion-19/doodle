@@ -4,15 +4,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center; /* Optional, to align items vertically */
+  background: url(../../public/time.jpg);
 }
 .img {
   height: 30px;
   width: 30px;
 }
 
-
 .navbar h1 {
-  color: #0f0e0e;
+  color: #000000;
 }
 
 .navbar .links {

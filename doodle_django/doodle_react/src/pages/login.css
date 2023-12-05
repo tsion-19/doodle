@@ -1,0 +1,14 @@
+.login {
+  /* background: url(../../public/time.jpg); */
+  height: 100vh;
+  margin-top: 30px;
+  margin-left: 400px;
+}
+
+.login .h2 {
+  color: black;
+}
+
+.login .Button {
+  background-color: blueviolet;
+}

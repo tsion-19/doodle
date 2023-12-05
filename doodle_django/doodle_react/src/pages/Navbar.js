@@ -10,17 +10,25 @@ import {
   Typography,
 } from "@mui/material";
 import "./navbar.css";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function Navbar() {
+  const location = useLocation();
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+
   const settings = [
-    "Dashboard",
-    "Account Setting",
-    "Help and Support",
-    "logout",
+    { id: "1", title: "home", link: "/" },
+    { id: "2", title: "Dashboard", link: "/dashboard" },
+    {
+      id: "3",
+      title: isLoggedIn ? "Logout" : "Register",
+      link: isLoggedIn ? "/logout" : "/register",
+    },
   ];
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -28,11 +36,19 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = () => {
+    // Clear token and any other user-related data
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isLoggedIn");
+    // Redirect to the home page
+    window.location.href = "/";
+  };
   return (
     <div className="navbar">
-      <h1 style={{ color: "#585858 " }}>
-        <img className="img" src="/doodle-favicon.svg" alt="imag" />
-        Doodle
+      <h1 style={{ color: "#00000 " }}>
+        <img className="img" src="/unical.png" alt="imag" />
+        Doodle Unical
       </h1>
       <div className="profile">
         <Toolbar>
@@ -59,8 +75,17 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting.id}
+                  onClick={
+                    setting.title === "Logout"
+                      ? handleLogout
+                      : handleCloseUserMenu
+                  }
+                >
+                  <Link to={setting.link}>
+                    <Typography textAlign="center">{setting.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
               {/* <Link to="/login">
