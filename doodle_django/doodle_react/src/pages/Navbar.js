@@ -13,6 +13,7 @@ import "./navbar.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import unical from "../components/images/unical.png";
 
 function Navbar() {
   const location = useLocation();
@@ -47,7 +48,7 @@ function Navbar() {
   return (
     <div className="navbar">
       <h1 style={{ color: "#00000 " }}>
-        <img className="img" src="/unical.png" alt="imag" />
+        <img className="img" src={unical} alt="imag" />
         Doodle Unical
       </h1>
       <div className="profile">
@@ -72,8 +73,7 @@ function Navbar() {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
+              onClose={handleCloseUserMenu}>
               {settings.map((setting) => (
                 <MenuItem
                   key={setting.id}
@@ -81,8 +81,7 @@ function Navbar() {
                     setting.title === "Logout"
                       ? handleLogout
                       : handleCloseUserMenu
-                  }
-                >
+                  }>
                   <Link to={setting.link}>
                     <Typography textAlign="center">{setting.title}</Typography>
                   </Link>

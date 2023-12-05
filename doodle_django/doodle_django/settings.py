@@ -53,11 +53,16 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
+CORS_ALLOWED_APPS = [
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+]
+
 CSRF_COOKIE_HTTPONLY = False
 
-CSRF_COOKIE_SECURE = False
-
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+]
 
 # Application definition
 

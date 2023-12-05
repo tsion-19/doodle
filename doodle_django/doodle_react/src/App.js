@@ -19,6 +19,7 @@ import Preference from "./pages/Preference";
 import Register from "./pages/Regsiter";
 import Login from "./pages/Login";
 import Feedback from "./pages/Feedback";
+import User from "./pages/User";
 
 function App() {
   const location = useLocation();
@@ -47,6 +48,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/preference" element={<Preference />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/user" element={<User />} />
       </Routes>
     </div>
   );

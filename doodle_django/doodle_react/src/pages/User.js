@@ -3,7 +3,7 @@ import news from "../news.json";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const preference = () => {
+const Preference = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
@@ -54,4 +54,4 @@ const preference = () => {
   );
 };
 
-export default preference;
+export default Preference;
