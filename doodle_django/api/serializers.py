@@ -71,3 +71,20 @@ class SchedulePoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchedulePool
         fields = '__all__'
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        user = self.context.get("user")
+        email = data.get("email", None)
+        if (not user or not user.is_authenticated) and not email:
+            raise serializers.ValidationError("User must be logged or a valid email must be provided", code="MissingEmail")
+        return data
+
+    class Meta:
+        model = Feedback
+        fields = '__all__'
+
+class FeedbackAttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackAttachment
+        fields = '__all__'

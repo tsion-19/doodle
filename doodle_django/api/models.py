@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.timezone import *
+from django.contrib.auth import get_user_model
 
 from datetime import timedelta
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import Group, Permission
+
 
 
 class VideoType(models.Model):
@@ -130,50 +132,55 @@ class Vote(models.Model):
         on_delete=models.CASCADE
     )
 
+class Feedback(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column="id"
+    )
+    name = models.CharField(
+        db_column="name",
+        max_length=20,
+        blank=False,
+        null=False,
+    )
+    message = models.CharField(
+        db_column="message",
+        max_length=1500,
+        blank=False,
+        null=False,
+    )
+    creation_date = models.DateTimeField(
+        db_column="creation_date",
+        auto_now_add=True
+    )
+    email = models.EmailField(
+        db_column="email",
+        blank=True,
+        null=True
+    )
+    user_id = models.ForeignKey(
+        get_user_model(),
+        db_column="user_id",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+
+class FeedbackAttachment(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column="id"
+    )
+    feedback_id = models.ForeignKey(
+        Feedback,
+        db_column="feedback_id",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    file = models.FileField(
+        upload_to="feedback/",
+        db_column="file"
+    )
 
 
-
-# class AppUserManager(BaseUserManager):
-#     def create_user(self, email, username, password=None):
-#         if not email:
-#             raise ValueError('An email is required.')
-#         if not username:
-#             raise ValueError('A username is required.')
-#         if not password:
-#             raise ValueError('A password is required.')
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, username=username)
-#         user.set_password(password)
-#         user.save()
-#         return user
-
-# class AppUserManager(BaseUserManager):
-#     def create_user(self, email, username, password=None, **extra_fields):
-#         if not email:
-#             raise ValueError('An email is required.')
-#         if not username:
-#             raise ValueError('A username is required.')
-#         if not password:
-#             raise ValueError('A password is required.')
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, username=username, **extra_fields)
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-
-#     def create_superuser(self, email, password=None, **extra_fields):
-#         if not email:
-#             raise ValueError('An email is required.')
-#         if not password:
-#             raise ValueError('A password is required.')
-#         user = self.create_user(email, password=password, **extra_fields)
-#         user.is_superuser = True
-#         user.save(using=self._db)
-#         return user
-
-
-
-# class User(models.Model):
-#     username = models.CharField(max_length=50, unique=True)
-#     email = models.EmailField(unique=True)
-#     password = models.CharField(max_length=100)

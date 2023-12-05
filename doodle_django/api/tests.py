@@ -1,11 +1,12 @@
-from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
+
 from django.urls import reverse
 from django.utils.timezone import now, timedelta
-from collections import OrderedDict
-from .models import Meeting
-from rest_framework.test import APIClient
+from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from .models import *
 
 
 class MeetingTests(APITestCase):
@@ -37,12 +38,12 @@ class MeetingTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Debug information
-        print(f"Response data: {response.data}")
+        #print(f"Response data: {response.data}")
         
         self.created_meeting_id = response.data.get('id')  # Set the created meeting ID
 
         # Debug information
-        print(f"created_meeting_id: {self.created_meeting_id}")
+        #print(f"created_meeting_id: {self.created_meeting_id}")
 
     def test_create_meeting_unsuccessfully_incomplete_information(self):
         """
@@ -355,3 +356,100 @@ class MeetingTests(APITestCase):
         response = self.client.put(url, invalid_data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class FeedbackTests(APITestCase):
+
+    '''
+    Feature: Feedback Submission
+    '''
+
+    def test_feedback_creation_api_accessible(self):
+        '''
+        Scenario: Submitting feedback via API
+        Given a user submits feedback through the website interface
+        When the API receives a POST request to submit feedback
+        Then the API endpoint for submitting feedback should be accessible and functional
+        '''
+        url = reverse('api:api_feedback_create')
+        response = self.client.post(url, data={})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        
+    def test_feedback_creation_api_logged_success(self):
+        '''
+        Scenario: Required fields in the feedback API request
+        Given a user submits feedback via the API
+        When the required fields (name, message, user or email) are included in the request
+        Then the API should accept the request and process the feedback
+        '''
+        user = User.objects.create_user(username="user", password="password")
+        logged = self.client.login(username="user", password="password")
+        
+        url = reverse('api:api_feedback_create')
+        data = {
+            "name": "test",
+            "message": "test message",
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Feedback.objects.count(), 1)
+        self.client.logout()
+
+
+    def test_feedback_creation_api_anonymous_success(self):
+        '''
+        Scenario: Anonymous feedback submission via API
+        Given a user chooses to submit anonymous feedback via the API
+        When the API receives a request for anonymous feedback submission
+        Then the API should handle the submission accordingly
+        And allow the feedback to be submitted without mandatory identification information
+        '''
+        url = reverse('api:api_feedback_create')
+        data = {
+            "name": "test",
+            "message": "test message",
+            "email": "test@test.test"
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Feedback.objects.count(), 1)
+
+
+    def test_feedback_creation_api_unsuccess(self):
+        '''
+        Scenario: Validation checks for essential information via API
+        Given a user attempts to submit feedback via the API
+        When the request lacks essential information
+        Then the API should respond with an error message/status code
+        And indicate the missing or incomplete information
+        '''
+        url = reverse('api:api_feedback_create')
+        data = {
+            "name": "test",
+            "email": "test@test.test"
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Feedback.objects.count(), 0)
+
+
+    def test_feedback_creation_api_files_success(self):
+        '''
+        Scenario: Attaching files or screenshots via API
+        Given a user submits feedback with attached files via the API
+        When the API processes the request
+        Then the API should handle file attachments appropriately
+        And associate the files with the submitted feedback
+        '''
+        url = reverse('api:api_feedback_create')
+        tmp_file = SimpleUploadedFile("file.jpg", b"file_content", content_type="image/jpg")
+        data = {
+            "name": "test",
+            "message": "test message",
+            "email": "test@test.test",
+            "attachments": tmp_file
+        }
+
+        response = self.client.post(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Feedback.objects.count(), 1)
