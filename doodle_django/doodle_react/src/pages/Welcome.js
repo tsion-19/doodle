@@ -41,9 +41,8 @@ function Welcome() {
           alignItems: "center",
           width: 800,
           height: 200,
-          ml: 30,
-        }}
-      >
+          ml: 45,
+        }}>
         <Box className="box">
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Typography component="div" variant="h4">
@@ -51,8 +50,7 @@ function Welcome() {
             </Typography>
           </CardContent>
           <Box
-            sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}
-          ></Box>
+            sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}></Box>
         </Box>
       </Card>
       <div className="card" style={{ display: "flex" }}>
@@ -69,8 +67,7 @@ function Welcome() {
               bgcolor: "rgb(167, 178, 187)",
               ml: 5,
               mr: 10,
-            }}
-          >
+            }}>
             <CardActionArea>
               <Typography variant="h4">{card.title}</Typography>
             </CardActionArea>

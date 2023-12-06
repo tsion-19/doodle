@@ -36,6 +36,7 @@ const Register = () => {
       console.log(response);
     } catch (error) {
       console.log(error);
+      alert(error.response.data.non_field_errors);
     }
   };
 

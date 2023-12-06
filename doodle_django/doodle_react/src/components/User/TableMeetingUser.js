@@ -86,40 +86,29 @@ const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
 
     console.log("Submitting Preferences:", preferences); // Log the preferences being submitted
 
-    axios
-      .post("http://127.0.0.1:8000/api/participant-preference/", preferences, {
-        headers: {
-          "Content-type": "multipart/form-data",
-          withCredentials: true,
-        },
-      })
-      .then((response) => {
-        alert("OK");
-      })
-      .catch((error) => {
-        alert("NO");
-      });
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/participant-preference/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(preferences),
+        }
+      );
 
-    // try {
-    //     const response = await fetch("http://localhost:8000/api/preferences/", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(preferences),
-    //     });
-
-    //     if (response.ok) {
-    //         console.log("Preferences submitted successfully!");
-    //     } else {
-    //         console.error("Failed to submit preferences:", response.statusText);
-    //         console.log("Response Status:", response.status);
-    //         console.log("Response Body:", await response.json());
-    //         console.log("Submitted Preferences:", preferences);
-    //     }
-    // } catch (error) {
-    //     console.error("An unexpected error occurred:", error.message);
-    // }
+      if (response.ok) {
+        console.log("Preferences submitted successfully!");
+      } else {
+        console.error("Failed to submit preferences:", response.statusText);
+        console.log("Response Status:", response.status);
+        console.log("Response Body:", await response.json());
+        console.log("Submitted Preferences:", preferences);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error.message);
+    }
 
     // Reset state after submission
     setCheckboxValues(Array.from({ length: time_slots.length }, () => false));

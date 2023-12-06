@@ -37,7 +37,7 @@ const Login = () => {
       const getToken = await sessionStorage.getItem("token");
       console.log("hava token");
       console.log(getToken);
-      if (getToken == "63565093f18c0cd2a155116a564ae01d4f71b7d1") {
+      if (getToken == "4a77f60688d0c0d4f804ab03735782067f166d01") {
         console.log("IM booking");
         navigate("/create");
       } else {

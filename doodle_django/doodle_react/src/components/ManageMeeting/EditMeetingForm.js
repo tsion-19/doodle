@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }) =>{
+const EditableMeeting = ({
+  setEditConfirmation,
+  setEditMode,
+  setUpdatedMeeting,
+}) => {
   const [meeting, setMeeting] = useState({
-    title: '',
-    location: '',
+    title: "",
+    location: "",
     video_conferencing: false,
-    duration: '',
-    description: '',
-    deadline: '',
-    passcode: '',
+    duration: "",
+    description: "",
+    deadline: "",
+    passcode: "",
     // Add other fields as needed
   });
 
@@ -24,7 +28,7 @@ const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }
 
   const fetchLastMeeting = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/meetings/');
+      const response = await axios.get("http://127.0.0.1:8000/api/meetings/");
       const lastMeeting = response.data[response.data.length - 1];
       setMeeting({
         title: lastMeeting.title,
@@ -38,7 +42,7 @@ const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }
         // Update other fields as needed
       });
     } catch (error) {
-      console.error('Error fetching last meeting:', error);
+      console.error("Error fetching last meeting:", error);
     }
   };
 
@@ -59,15 +63,20 @@ const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/api/meetings/${meeting.id}/`, meeting);
-      console.log('Meeting updated successfully:', response.data);
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/meetings/${meeting.id}/`,
+        meeting
+      );
+      console.log("Meeting updated successfully:", response.data);
 
       setUpdateStatus({
         success: true,
         error: null,
       });
       // Fetch the updated meeting details
-      const updatedResponse = await axios.get(`http://127.0.0.1:8000/api/meetings/${meeting.id}/`);
+      const updatedResponse = await axios.get(
+        `http://127.0.0.1:8000/api/meetings/${meeting.id}/`
+      );
       const updatedMeeting = updatedResponse.data;
 
       // Update the state with the updated meeting details
@@ -79,11 +88,11 @@ const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }
         setEditMode(false); // Reset editMode
       }, 2000); // Adjust the duration as needed
     } catch (error) {
-      console.error('Error updating meeting:', error);
+      console.error("Error updating meeting:", error);
 
       setUpdateStatus({
         success: false,
-        error: 'Fill the required fields. Please try again.',
+        error: "Fill the required fields. Please try again.",
       });
     }
   };
@@ -94,35 +103,62 @@ const EditableMeeting = ({ setEditConfirmation, setEditMode, setUpdatedMeeting }
       <form onSubmit={handleSubmit}>
         <label>
           Title:
-          <input type="text" name="title" value={meeting.title} onChange={handleInputChange} />
+          <input
+            type="text"
+            name="title"
+            value={meeting.title}
+            onChange={handleInputChange}
+          />
         </label>
         <br />
         <label>
           Location:
-          <input type="text" name="location" value={meeting.location} onChange={handleInputChange} />
+          <input
+            type="text"
+            name="location"
+            value={meeting.location}
+            onChange={handleInputChange}
+          />
         </label>
         <br />
         {/* Add other input fields as needed */}
         <label>
           Video Conferencing:
-          <input type="checkbox" name="video_conferencing" checked={meeting.video_conferencing} onChange={handleCheckboxChange} />
+          <input
+            type="checkbox"
+            name="video_conferencing"
+            checked={meeting.video_conferencing}
+            onChange={handleCheckboxChange}
+          />
         </label>
         <br />
         <label>
           Duration:
-          <input type="text" name="duration" value={meeting.duration} onChange={handleInputChange} />
+          <input
+            type="text"
+            name="duration"
+            value={meeting.duration}
+            onChange={handleInputChange}
+          />
         </label>
         <br />
         <label>
           Description:
-          <input type="text" name="description" value={meeting.description} onChange={handleInputChange} />
+          <input
+            type="text"
+            name="description"
+            value={meeting.description}
+            onChange={handleInputChange}
+          />
         </label>
         <br />
         {/* Add other input fields as needed */}
         <button type="submit">Update</button>
-        
+
         {updateStatus.success && <p>Meeting updated successfully!</p>}
-        {updateStatus.error && <p style={{ color: 'red' }}>{updateStatus.error}</p>}
+        {updateStatus.error && (
+          <p style={{ color: "red" }}>{updateStatus.error}</p>
+        )}
       </form>
     </div>
   );

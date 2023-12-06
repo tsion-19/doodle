@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import FeedbackModal from "./FeedbackModal";
-import { Helmet } from "react-helmet";
 //import "bootstrap/dist/css/bootstrap.min.css";
 
 const Background = styled.div`
@@ -83,7 +82,8 @@ const FeedbackForm = () => {
         handleOpenModal();
       })
       .catch((error) => {
-        setmodalMessage("FAIL");
+        console.log(error);
+        setmodalMessage(error.response.data.name);
         handleOpenModal();
       });
   };
