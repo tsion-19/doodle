@@ -56,8 +56,9 @@
   margin-block-start: 1em;
   margin-block-end: 1em;
 }
+
 .selected_column {
-  background-color: #f5f5f5; /* Cambia il colore di sfondo quando la colonna è selezionata */
+  background-color: #f0e9e6; /* Cambia il colore di sfondo quando la colonna è selezionata */
 }
 
 .img_star_select {

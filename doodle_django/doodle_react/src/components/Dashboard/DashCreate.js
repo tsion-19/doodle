@@ -3,7 +3,8 @@ import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import calendar from "../images/calendar.png";
-import { Link } from "react-router-dom";
+import PrimaryButton from "../Utils/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const DashCreate = () => {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -13,6 +14,13 @@ const DashCreate = () => {
       backgroundColor: grey[700],
     },
   }));
+
+  let navigate = useNavigate();
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    navigate("/create");
+  };
 
   return (
     <div className="field">
@@ -36,11 +44,10 @@ const DashCreate = () => {
           />
         </div>
         <div style={{ textAlign: "end" }}>
-          <Link to="/create">
-            <ColorButton style={{ margin: 20 }} variant="contained">
-              Create Meeting
-            </ColorButton>
-          </Link>
+          <PrimaryButton
+            text={"Create Meeting"}
+            functionOnClick={handleButtonClick}
+          />
         </div>
       </div>
     </div>

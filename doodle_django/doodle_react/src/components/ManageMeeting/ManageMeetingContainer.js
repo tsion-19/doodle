@@ -7,31 +7,20 @@ import "../ManageMeeting/manage.css";
 import ManageMeeting from "../ManageMeeting/ManageMeeting";
 import News from "../CreationMeeting/News";
 import TableMeeting from "../ManageMeeting/TableMeeting";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
-import { styled } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PrimaryButton from "../Utils/PrimaryButton";
 
 const Manage = ({ news, data }) => {
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[600]),
-    backgroundColor: grey[600],
-    "&:hover": {
-      backgroundColor: grey[700],
-    },
-  }));
-
   const getToken = () => sessionStorage.getItem("token");
 
   const navigate = useNavigate();
 
   const submitForm = async () => {
     let variable = null;
-    console.log("selected", selectedColumn);
-    if (selectedColumn !== "")
+    if (selectedColumn !== undefined && selectedColumn !== "")
       variable = data["timeslots"][selectedColumn - 1]["id"];
-
+    else navigate("/dashboard");
     try {
       await axios.post(
         "http://127.0.0.1:8000/api/meeting/" + data["id"] + "/book/",
@@ -44,23 +33,18 @@ const Manage = ({ news, data }) => {
           },
         }
       );
-      alert("Timeslot booked!");
+      // alert("Timeslot booked!");
       navigate("/dashboard");
-    } catch (e) {
-      // console.log("sth failed", e);
-    }
+    } catch (e) {}
   };
 
-  const [selectedColumn, setSelectedColumn] = useState([]);
+  const [selectedColumn, setSelectedColumn] = useState();
 
   useEffect(() => {
-    // console.log("qua");
     if (data["final_date"] !== null && data["timeslots"]) {
       for (let i = 0; i < data["timeslots"].length; ++i) {
-        // console.log("index ", i, data["final_date"]);
         if (data["final_date"] === data["timeslots"][i]["id"]) {
           setSelectedColumn(i + 1);
-          // console.log(selectedColumn);
           return;
         }
       }
@@ -78,27 +62,34 @@ const Manage = ({ news, data }) => {
   };
 
   return (
-    <div className="CreateGroup">
+    <div id="CreateGroup" className="main_grid">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid className="sx_news" item xs={2}>
             <News news={news} start={0} numberOfDivsNews={3} />
           </Grid>
-          <Grid style={{ marginTop: 32, paddingLeft: 0 }} item xs={8}>
+          <Grid style={{ paddingLeft: 0 }} item xs={8}>
             <div className="field">
               <ManageMeeting data={data} />
+            </div>
+            <div className="field">
               <TableMeeting
                 data={data}
                 selectedColumn={selectedColumn}
                 columnSelection={columnSelection}
               />
-              <div style={{ textAlign: "end" }}>
-                <ColorButton
-                  style={{ margin: 20, textAlign: "end" }}
-                  onClick={submitForm}
-                  variant="contained">
-                  Book it
-                </ColorButton>
+              <div
+                style={{
+                  marginRight: 20,
+                  paddingBottom: 20,
+                  textAlign: "end",
+                }}>
+                <PrimaryButton
+                  text="Book it"
+                  style={{ textAlign: "end" }}
+                  functionOnClick={submitForm}
+                  variant="contained"
+                />
               </div>
             </div>
           </Grid>

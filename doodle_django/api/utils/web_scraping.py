@@ -34,9 +34,15 @@ for i in range(1, 5):
             alt = content["results"][i]["publication"]["preview_image"]["title"]
             link = content["results"][i]["path"]
             # print(title, subheading, image, alt)
+
+                    
+            title_cut = ' '.join(title.split()[:6]) + " ..."
+            print(title_cut)
+                    
             out.append(
                 {
                     "title": title,
+                    "title_cut": title_cut,
                     "subheading": subheading,
                     "image": image,
                     "alt": alt,

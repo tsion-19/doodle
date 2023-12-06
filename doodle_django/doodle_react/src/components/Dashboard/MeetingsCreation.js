@@ -4,7 +4,7 @@ import DashCreate from "./DashCreate";
 
 const MeetingsCreation = ({ data }) => {
   return (
-    <div style={{ paddingBottom: 20 }}>
+    <div className="main_grid">
       <Grid container spacing={2}>
         <Grid item xs={8}>
           <AllMeetings data={data} />

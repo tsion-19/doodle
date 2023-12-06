@@ -71,7 +71,7 @@ const AllMeetings = ({ data }) => {
             <Grid item s={3}>
               <FormControl sx={{ m: 1, width: "max-content" }}>
                 <Select
-                  style={{ color: "#757575" }}
+                  style={{ color: "#757575", backgroundColor: "white" }}
                   value={age}
                   onChange={handleChangeMeeting}
                   displayEmpty
@@ -96,7 +96,7 @@ const AllMeetings = ({ data }) => {
                 <div className="search-container">
                   <div className="search">
                     <div className="search-icon">
-                      <SearchIcon style={{ color: "#9d9d9d9d" }} />
+                      <SearchIcon style={{ color: "#827066" }} />
                     </div>
                     <input
                       style={{ marginLeft: 5, marginBottom: 2, width: "80%" }}

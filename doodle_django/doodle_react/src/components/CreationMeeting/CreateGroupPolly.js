@@ -3,9 +3,6 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import "./createGroupPolly.css";
 import News from "./News";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
-import { styled } from "@mui/material/styles";
 import CreateGroup from "./CreateGroup.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,16 +10,9 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
+import PrimaryButton from "../Utils/PrimaryButton.js";
 
 const CreateGroupPolly = ({ news }) => {
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[600]),
-    backgroundColor: grey[600],
-    "&:hover": {
-      backgroundColor: grey[700],
-    },
-  }));
-
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState([
     "09:00",
@@ -58,27 +48,6 @@ const CreateGroupPolly = ({ news }) => {
         { date: value, timeRange: [...selectedTimeRange] },
       ]);
     }
-
-    // let array_time_slots = [];
-    // for (let i = 0; i < selectedDates.length; ++i) {
-    //   console.log("selectedDates[i]", selectedDates[i])
-    //   const startDate = selectedDates[i].date.toISOString().split("T")[0];
-    //   const startTime = selectedDates[i].timeRange[0];
-    //   const startDateTime = `${startDate}T${startTime}:00`;
-
-    //   const endDate = selectedDates[i].date.toISOString().split("T")[0];
-    //   const endTime = selectedDates[i].timeRange[1];
-    //   const endDateTime = `${endDate}T${endTime}:00`;
-
-    //   console.log("Selected date", startDateTime, endDateTime);
-
-    //   array_time_slots.push({
-    //     start_date: startDateTime,
-    //     end_date: endDateTime,
-    //   });
-    // }
-
-    // console.log("array_time_slots ", array_time_slots)
   };
 
   const handleTimeChange = (time, index) => {
@@ -93,6 +62,7 @@ const CreateGroupPolly = ({ news }) => {
     view === "month" && date < new Date();
 
   const [error, setError] = useState(false);
+  const [errorDate, setErrorDate] = useState(false);
   const [title, setTitle] = useState("");
 
   const updateTitle = (newTitle) => {
@@ -125,7 +95,6 @@ const CreateGroupPolly = ({ news }) => {
   };
 
   let navigate = useNavigate();
-  // console.log({ title, date });
 
   const getToken = () => sessionStorage.getItem("token");
 
@@ -141,11 +110,16 @@ const CreateGroupPolly = ({ news }) => {
   };
 
   const checkRequirements = () => {
+    let bool = true;
     if (title === "") {
       titleError();
-      return false;
+      bool = false;
     }
-    return true;
+    if (selectedDates.length === 0) {
+      setErrorDate(true);
+      bool = false;
+    }
+    return bool;
   };
 
   const deleteFields = () => {
@@ -160,17 +134,6 @@ const CreateGroupPolly = ({ news }) => {
     const year = deadline.getFullYear();
     const month = (deadline.getMonth() + 1).toString().padStart(2, "0");
     const day = deadline.getDate().toString().padStart(2, "0");
-    const hours = deadline.getHours().toString().padStart(2, "0");
-    const minutes = deadline.getMinutes().toString().padStart(2, "0");
-    const seconds = deadline.getSeconds().toString().padStart(2, "0");
-    const offsetHours = Math.floor(deadline.getTimezoneOffset() / 60);
-    const offsetMinutes = Math.abs(deadline.getTimezoneOffset() % 60);
-
-    const offsetSign = offsetHours >= 0 ? "+" : "-";
-    const offsetHoursFormatted = Math.abs(offsetHours)
-      .toString()
-      .padStart(2, "0");
-    const offsetMinutesFormatted = offsetMinutes.toString().padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   };
@@ -179,7 +142,6 @@ const CreateGroupPolly = ({ news }) => {
     e.preventDefault();
 
     if (selectedDates.length === 0) {
-      // Handle the case where no dates are selected
       console.error("No dates selected");
       return;
     }
@@ -189,16 +151,11 @@ const CreateGroupPolly = ({ news }) => {
       selectedDates[selectedDates.length - 1].date
     );
 
-    // const timeslots = selectedDates.map((dateObj) => ({
-    //   start_date: dateObj.date.toISOString().split("T")[0],
-    //   end_date: deadline,
-    // }));
     let array_time_slots = [];
     for (let i = 0; i < selectedDates.length; ++i) {
       const newDate = new Date(selectedDates[i].date);
       newDate.setDate(selectedDates[i].date.getDate() + 1);
 
-      // console.log("selectedDates[i]", selectedDates[i]);
       const startDate = newDate.toISOString().split("T")[0];
       const startTime = selectedDates[i].timeRange[0];
       const startDateTime = `${startDate}T${startTime}:00`;
@@ -217,14 +174,7 @@ const CreateGroupPolly = ({ news }) => {
     const startTime = selectedTimeRange[0];
     const endTime = selectedTimeRange[1];
     const duration = calculateDuration(startTime, endTime);
-    // console.log(
-    //   "data accepted befroe api",
-    //   title,
-    //   description,
-    //   location,
-    //   duration,
-    //   formatDeadline(selectedDates[selectedDates.length - 1].date)
-    // );
+
     let data = {
       title: title,
       description: description,
@@ -235,24 +185,16 @@ const CreateGroupPolly = ({ news }) => {
       deadline: deadline,
       timeslots: array_time_slots,
     };
-    // console.log("after", data);
     try {
-      const result = await axios.post(
-        "http://127.0.0.1:8000/api/meetings/new/",
-        data,
-        {
-          headers: {
-            authorization: `Token ${getToken()}`,
-          },
-        }
-      );
-      alert("Meeting Created successfully!");
+      await axios.post("http://127.0.0.1:8000/api/meetings/new/", data, {
+        headers: {
+          authorization: `Token ${getToken()}`,
+        },
+      });
+      // alert("Meeting Created successfully!");
       navigate("/manage");
       deleteFields();
-      // console.log(result);
-    } catch (e) {
-      // console.log("sth failed", e);
-    }
+    } catch (e) {}
   };
 
   const handleButtonClick = (e) => {
@@ -264,18 +206,18 @@ const CreateGroupPolly = ({ news }) => {
 
   const onExpand = (index) => {
     const btn = document.getElementsByClassName("field");
-    if (index === 0) btn[0].style.marginBottom = "120px";
+    if (index === 0) btn[0].style.marginBottom = "100px";
     else btn[1].style.paddingBottom = "180px";
   };
 
   const onContraction = (index) => {
     const btn = document.getElementsByClassName("field");
-    if (index === 0) btn[0].style.marginBottom = "0px";
+    if (index === 0) btn[0].style.marginBottom = "20px";
     else btn[1].style.paddingBottom = "0px";
   };
 
   return (
-    <div className="CreateGroupPolly">
+    <div id="CreateGroupPolly" className="main_grid">
       <Grid container spacing={2}>
         <Grid className="sx_news" item xs={2}>
           <News news={news} start={0} numberOfDivsNews={3} />
@@ -320,9 +262,13 @@ const CreateGroupPolly = ({ news }) => {
                     ))}
                   </ul>
                 ) : (
-                  <p>No dates selected</p>
+                  <div>
+                    {!errorDate && (
+                      <p className="no_error">No dates selected</p>
+                    )}
+                    {errorDate && <p className="error">No dates selected</p>}
+                  </div>
                 )}
-
                 <div>
                   <h2>Select Time Range:</h2>
                   <div>
@@ -346,15 +292,21 @@ const CreateGroupPolly = ({ news }) => {
                 </div>
               </div>
             </div>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <ColorButton
-              style={{ margin: 20, textAlign: "end" }}
-              onClick={(e) => handleButtonClick(e)}
-              variant="contained"
-              type="submit">
-              Create Invate and Continue
-            </ColorButton>
+            <div
+              style={{
+                textAlign: "end",
+                marginBottom: 20,
+                marginRight: 20,
+                marginTop: 20,
+              }}>
+              <PrimaryButton
+                text={"Create Invate and Continue"}
+                functionOnClick={handleButtonClick}
+                style={{ margin: 20, textAlign: "end" }}
+                variant="contained"
+                type="submit"
+              />
+            </div>
           </div>
         </Grid>
         <Grid className="dx_news" item xs={2}>
