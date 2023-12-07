@@ -64,7 +64,10 @@ const AllMeetings = ({ data }) => {
         }}>
         <div
           style={{ display: "inline-flex", width: "-webkit-fill-available" }}>
-          <Grid container spacing={2} style={{ display: "flex" }}>
+          <Grid
+            container
+            spacing={2}
+            style={{ display: "flex", paddingTop: 0 }}>
             <Grid item s={3}>
               <h3>Meetings</h3>
             </Grid>

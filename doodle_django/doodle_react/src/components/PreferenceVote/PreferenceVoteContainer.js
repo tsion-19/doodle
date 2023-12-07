@@ -14,6 +14,7 @@ import axios from "axios";
 import "../CreationMeeting/createGroup.css";
 import SecondaryButton from "../Utils/SecondaryButton";
 import PrimaryButton from "../Utils/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const PreferenceVoteContainer = ({ news, data }) => {
   const getToken = () => sessionStorage.getItem("token");
@@ -38,6 +39,8 @@ const PreferenceVoteContainer = ({ news, data }) => {
   const deleteFields = () => {
     setSelectedDates([]);
   };
+
+  let navigate = useNavigate();
 
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -103,8 +106,7 @@ const PreferenceVoteContainer = ({ news, data }) => {
           }
         );
       }
-      alert("Timeslot booked!");
-      window.location.reload();
+      navigate("/dashboard");
       deleteFields();
     } catch (e) {}
   };
@@ -117,7 +119,7 @@ const PreferenceVoteContainer = ({ news, data }) => {
   };
 
   return (
-    <div className="CreateGroup">
+    <div className="main_grid">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid className="sx_news" item xs={2}>
@@ -125,7 +127,6 @@ const PreferenceVoteContainer = ({ news, data }) => {
           </Grid>
           <Grid
             style={{
-              marginTop: 32,
               paddingLeft: 0,
             }}
             item
