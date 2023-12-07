@@ -19,7 +19,9 @@ const DashCreate = () => {
           textAlign: "left",
           marginTop: 0,
         }}>
-        <h3 style={{ marginBlockStart: "0em" }}>Your meetings page</h3>
+        <h3 style={{ marginBlockStart: "0em", paddingTop: 20 }}>
+          Your meetings page
+        </h3>
         <p style={{ fontSize: 14 }}>
           Share your availability with clients, candidates or students and
           create your meeting.
