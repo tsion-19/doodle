@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.timezone import *
 from django.contrib.auth import get_user_model
@@ -19,7 +21,7 @@ class TimeSlot(models.Model):
         primary_key=True,
         db_column="id",
     )
-    schedule_pool_id = models.ForeignKey(
+    schedule_pool = models.ForeignKey(
         "SchedulePool",
         on_delete=models.CASCADE,
         blank=True,
@@ -74,7 +76,7 @@ class Meeting(models.Model):
     video_conferencing = models.BooleanField(
         db_column="video_conferencing",
     )
-    video_type_id = models.ForeignKey(
+    video_type = models.ForeignKey(
         VideoType,
         on_delete=models.SET_NULL,
         db_column="video_type_id",
@@ -108,7 +110,7 @@ class Meeting(models.Model):
         blank=False,
         null=False
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         get_user_model(),
         db_column="user_id",
         on_delete=models.SET_NULL,
@@ -134,6 +136,22 @@ class SchedulePool(models.Model):
         on_delete=models.CASCADE,
     )
 
+class SchedulePoolLink(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column="id"
+    )
+    schedule_pool = models.ForeignKey(
+        "SchedulePool",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=False,
+    )
+    token = models.UUIDField(
+        db_column="token",
+        default=uuid.uuid4
+    )
+
 class Vote(models.Model):
     id = models.AutoField(
         primary_key=True,
@@ -148,7 +166,7 @@ class Vote(models.Model):
         to=TimeSlot,
         on_delete=models.CASCADE
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         get_user_model(),
         db_column="user_id",
         on_delete=models.CASCADE,
@@ -188,7 +206,7 @@ class Feedback(models.Model):
         blank=True,
         null=True
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         get_user_model(),
         db_column="user_id",
         on_delete=models.SET_NULL,
@@ -201,7 +219,7 @@ class FeedbackAttachment(models.Model):
         primary_key=True,
         db_column="id"
     )
-    feedback_id = models.ForeignKey(
+    feedback = models.ForeignKey(
         Feedback,
         db_column="feedback_id",
         on_delete=models.CASCADE,
