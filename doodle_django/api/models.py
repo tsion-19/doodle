@@ -2,13 +2,6 @@ from django.db import models
 from django.utils.timezone import *
 from django.contrib.auth import get_user_model
 
-from datetime import timedelta
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.contrib.auth.models import Group, Permission
-
-
-
 class VideoType(models.Model):
     id = models.AutoField(
         primary_key=True,
@@ -43,6 +36,17 @@ class TimeSlot(models.Model):
         null=False,
     )
     
+
+class Preference(models.Model):
+    id = models.BigAutoField(
+        primary_key=True,
+        db_column="id",
+    )
+    description = models.CharField(
+        db_column="description",
+        max_length=500,
+        choices=(("YES", "YES"), ("MAYBE", "MAYBE"), ("NO","NO")),
+    )    
 
 class Meeting(models.Model):
     id = models.BigAutoField(
@@ -104,6 +108,19 @@ class Meeting(models.Model):
         blank=False,
         null=False
     )
+    user_id = models.ForeignKey(
+        get_user_model(),
+        db_column="user_id",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    user_nickname = models.CharField(
+        db_column="user_nickname",
+        max_length=20,
+        blank=True,
+        null=True
+    )
 
 class SchedulePool(models.Model):
     id = models.AutoField(
@@ -130,6 +147,19 @@ class Vote(models.Model):
         db_column="time_slot",
         to=TimeSlot,
         on_delete=models.CASCADE
+    )
+    user_id = models.ForeignKey(
+        get_user_model(),
+        db_column="user_id",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    user_nickname = models.CharField(
+        db_column="user_nickname",
+        max_length=20,
+        blank=True,
+        null=True
     )
 
 class Feedback(models.Model):
@@ -182,13 +212,21 @@ class FeedbackAttachment(models.Model):
         upload_to="feedback/",
         db_column="file"
     )
+    
+    
 class CustomTimeSlot(models.Model):
+    '''
+    REMOVED SOON, USE VOTE INSTEAD
+    '''
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     preference = models.CharField(max_length=10, default='yes')
     participant_preference = models.ForeignKey('ParticipantPreference', related_name='time_slots', on_delete=models.CASCADE)
 
 class ParticipantPreference(models.Model):
+    '''
+    REMOVED SOON, USE VOTE INSTEAD
+    '''
     YES = 'yes'
     MAYBE = 'maybe'
     NO = 'no'
