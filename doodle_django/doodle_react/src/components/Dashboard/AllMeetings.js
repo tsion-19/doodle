@@ -115,7 +115,9 @@ const AllMeetings = ({ data }) => {
           </Grid>
         </div>
       </div>
-      <div className="cardMeeting" style={{ paddingBottom: 5 }}>
+      <div
+        className="cardMeeting"
+        style={{ paddingBottom: 5, marginLeft: 40, marginRight: 40 }}>
         {data
           .filter(
             (meeting) =>
@@ -137,7 +139,7 @@ const AllMeetings = ({ data }) => {
                     }}>
                     <div>
                       <img
-                        style={{ width: "20px" }}
+                        style={{ width: "20px", paddingLeft: 15 }}
                         src={profile}
                         alt="profile"
                       />
@@ -157,10 +159,10 @@ const AllMeetings = ({ data }) => {
                         <img src={calendar_icon} alt="calendar_icon" />
                         <p>{meeting["timeslots"].length}</p>
                       </div>
-                      <div className="all_meeting_div_img">
+                      {/* <div className="all_meeting_div_img">
                         <img src={user} alt="user" />
                         <p>n° users</p>
-                      </div>
+                      </div> */}
                     </div>
                   </Grid>
                   <Grid

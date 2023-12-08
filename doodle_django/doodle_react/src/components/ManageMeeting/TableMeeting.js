@@ -155,10 +155,10 @@ const TableMeeting = ({ selectedColumn, columnSelection, data }) => {
                         <p>{start[3]}</p> */}
                         <p>{start[4]}</p>
                         <p>{end[4]}</p>
-                        <div className="div_user">
+                        {/* <div className="div_user">
                           <img src={user} alt="user" />
                           <nobr> 2</nobr>
-                        </div>
+                        </div> */}
                       </label>
                     )}
                   </th>
