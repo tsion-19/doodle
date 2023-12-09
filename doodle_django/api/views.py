@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model, login, logout
 from django.utils.crypto import get_random_string
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 
 from . serializers import *
 from . exceptions import *
@@ -66,6 +67,7 @@ def api_meeting_timeslots(request, meeting_id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
 
+@transaction.atomic
 @api_view(['POST'])
 def api_meetings_create(request):
     data = request.data
@@ -93,7 +95,7 @@ def api_meetings_create(request):
     schedule_pool = SchedulePool.objects.create( #persist
         meeting=meeting,
         voting_start_date=meeting.creation_date,
-        voting_deadline=meeting.deadline            
+        voting_deadline=meeting.deadline
     )
 
     link = SchedulePoolLink.objects.create( #persist

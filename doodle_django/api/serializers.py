@@ -35,7 +35,7 @@ class SchedulePoolSerializer(serializers.ModelSerializer):
 
 class TimeSlotSerializer(serializers.ModelSerializer):
 
-    schedule_pool = SchedulePoolSerializer(required=False)
+    schedule_pool = SchedulePoolSerializer(required=False, read_only=True)
 
     def validate(self, data):
         if 'end_date' in data and 'start_date' in data:
