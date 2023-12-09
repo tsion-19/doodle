@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Card, Input, TextField, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Card,
+  Input,
+  TextField,
+  Typography,
+  Button,
+  Grid,
+} from "@mui/material";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
 
@@ -44,6 +52,7 @@ const Login = () => {
         navigate("/", { state: { loggedInUser } });
       }
     } catch (error) {
+      alert(error.response.data.password1[1]);
       console.log(error);
     }
   };
@@ -58,7 +67,12 @@ const Login = () => {
   return (
     <div className="login">
       <h2> Login for Doodle Unical</h2>
-      <Card sx={{ maxWidth: 550, marginTop: 5 }} elevation={0} display="flex">
+
+      <Card
+        sx={{ maxWidth: 550, marginTop: 5, background: "#d1c3bb" }}
+        elevation={0}
+        display="flex"
+      >
         <Box sx={{ m: "1rem" }} />
         <TextField
           label="Username"
@@ -91,7 +105,8 @@ const Login = () => {
             size="large"
             fullWidth
             style={btnstyle}
-            onClick={handleSubmitLogin}>
+            onClick={handleSubmitLogin}
+          >
             Login
           </Button>
           <Box sx={{ m: "1rem" }} />

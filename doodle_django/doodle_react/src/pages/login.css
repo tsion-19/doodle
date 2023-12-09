@@ -1,9 +1,11 @@
 .login {
   /* background: url(../../public/time.jpg); */
   height: 100vh;
-  margin-top: 30px;
+  margin-top: 150px;
   margin-left: 400px;
+  margin-right: 400px;
   box-shadow: 1rem;
+  background-color: #d1c3bb;
 }
 
 .login .h2 {
@@ -11,5 +13,5 @@
 }
 
 .login .Button {
-  background-color: blueviolet;
+  background-color: #d1c3bb;
 }
