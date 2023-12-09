@@ -22,21 +22,21 @@ from django.contrib.auth import get_user_model,authenticate
 
 #         return instance
 
-class MeetingSerializer(serializers.ModelSerializer):
+class SchedulePoolLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Meeting
+        model = SchedulePoolLink
+        fields = ('token',)
+
+        
+class SchedulePoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchedulePool
         fields = '__all__'
 
-    def validate_deadline(self, value):
-        """
-        Validate that the deadline is not in the past.
-        """
-        if value and value < now():
-            raise serializers.ValidationError("Meeting deadline cannot be in the past.")
-        return value
-    
-
 class TimeSlotSerializer(serializers.ModelSerializer):
+
+    schedule_pool = SchedulePoolSerializer(required=False)
+
     def validate(self, data):
         if 'end_date' in data and 'start_date' in data:
             if data['end_date'] < data['start_date']:
@@ -49,13 +49,45 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MeetingTimeSlotSerializer(MeetingSerializer):
-    timeslots = TimeSlotSerializer(many=True)
+class MeetingSerializer(serializers.ModelSerializer):
 
-        
-class SchedulePoolSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SchedulePool
+        model = Meeting
+        fields = '__all__'
+
+    timeslots = TimeSlotSerializer(many=True, required=False)
+    link = SchedulePoolLinkSerializer(required=False)
+
+    def to_representation(self, obj):
+        ret = super(MeetingSerializer, self).to_representation(obj)
+
+        if not self.context.get('passcode', False):
+            ret.pop("passcode")
+
+        return ret
+
+    def validate_deadline(self, value):
+        """
+        Validate that the deadline is not in the past.
+        """
+        if value and value < now():
+            raise serializers.ValidationError("Meeting deadline cannot be in the past.")
+        return value
+    
+class PreferenceSerializer(serializers.ModelSerializer):
+    def to_representation(self, obj):
+        ret = super(PreferenceSerializer, self).to_representation(obj)
+        ret.pop('id')
+        return ret
+
+    class Meta:
+        model = Preference
+        fields = '__all__'
+
+class VoteSerializer(serializers.ModelSerializer):
+    preference = PreferenceSerializer()
+    class Meta:
+        model = Vote
         fields = '__all__'
 
 class FeedbackSerializer(serializers.ModelSerializer):

@@ -4,17 +4,6 @@ from django.db import models
 from django.utils.timezone import *
 from django.contrib.auth import get_user_model
 
-class VideoType(models.Model):
-    id = models.BigAutoField(
-        primary_key=True,
-        db_column="id"
-    )
-    name = models.CharField(
-        db_column="name",
-        max_length=100,
-        blank=False,
-        null=False,
-    )
 
 class TimeSlot(models.Model):
     id = models.BigAutoField(
@@ -25,18 +14,16 @@ class TimeSlot(models.Model):
         "SchedulePool",
         on_delete=models.CASCADE,
         blank=True,
-        null=False,
     )
     start_date = models.DateTimeField(
         db_column="start_date",
-        blank=False,
-        null=False,
     )
     end_date = models.DateTimeField(
         db_column="end_date",
-        blank=False,
-        null=False,
     )
+
+    class Meta:
+        unique_together = ('schedule_pool', 'start_date', 'end_date')
     
 
 class Preference(models.Model):
@@ -58,8 +45,6 @@ class Meeting(models.Model):
     title = models.CharField(
         db_column="title",
         max_length=100,
-        blank=False,
-        null=False,
     )
     description = models.CharField(
         db_column="description",
@@ -76,17 +61,8 @@ class Meeting(models.Model):
     video_conferencing = models.BooleanField(
         db_column="video_conferencing",
     )
-    video_type = models.ForeignKey(
-        VideoType,
-        on_delete=models.SET_NULL,
-        db_column="video_type_id",
-        blank=True,
-        null=True,
-    )
     duration = models.DurationField(
         db_column="duration",
-        blank=False,
-        null=False,
     )
     final_date = models.ForeignKey(
         TimeSlot, 
@@ -97,8 +73,6 @@ class Meeting(models.Model):
     )
     deadline = models.DateTimeField(
         db_column="deadline",
-        blank=False,
-        null=False,
     )
     creation_date = models.DateTimeField(
         db_column="creation_date",
@@ -107,8 +81,6 @@ class Meeting(models.Model):
     passcode = models.CharField(
         db_column="passcode",
         max_length=5,
-        blank=False,
-        null=False
     )
     user = models.ForeignKey(
         get_user_model(),
@@ -142,10 +114,9 @@ class SchedulePoolLink(models.Model):
         db_column="id"
     )
     schedule_pool = models.ForeignKey(
-        "SchedulePool",
+        SchedulePool,
         on_delete=models.CASCADE,
         blank=True,
-        null=False,
     )
     token = models.UUIDField(
         db_column="token",
@@ -188,14 +159,10 @@ class Feedback(models.Model):
     name = models.CharField(
         db_column="name",
         max_length=20,
-        blank=False,
-        null=False,
     )
     message = models.CharField(
         db_column="message",
         max_length=1500,
-        blank=False,
-        null=False,
     )
     creation_date = models.DateTimeField(
         db_column="creation_date",

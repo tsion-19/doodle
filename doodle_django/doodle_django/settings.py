@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     #app
     "doodle_react",
+    "doodle_django",
     "api",
     
 ]
