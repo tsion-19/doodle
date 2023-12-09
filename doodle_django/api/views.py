@@ -32,23 +32,6 @@ def api_meetings(request):
                 meeting.timeslots = timeslots.filter(schedule_pool_id__meeting_id=meeting.pk)
             return Response(MeetingTimeSlotSerializer(meetings, many=True).data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def last_meeting(request):
-    try:
-        last_meeting = Meeting.objects.latest('pk')
-        meeting = get_object_or_404(Meeting, pk=last_meeting.id)
-        return Response(MeetingSerializer(meeting).data, status=status.HTTP_200_OK)
-    except Meeting.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-def api_meeting(request):
-    if(request.GET):
-        try:
-            meeting = get_object_or_404(Meeting, pk=request.GET["id"])
-            return Response(MeetingSerializer(meeting).data, status=status.HTTP_200_OK)
-        except Meeting.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST', 'PUT'])
 def api_meeting_book(request, meeting_id):
@@ -65,6 +48,7 @@ def api_meeting_book(request, meeting_id):
     except Meeting.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
+
 @api_view(['POST', 'PUT'])
 def api_meeting_timeslots(request, meeting_id):
     try:
@@ -80,41 +64,6 @@ def api_meeting_timeslots(request, meeting_id):
     except Meeting.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['POST', 'PUT'])
-def api_meeting_timeslots(request, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    
-    data = request.data
-    timeslots = data.pop("timeslots", [])
-    
-    print(timeslots)
-
-    meeting_serializer = MeetingSerializer(meeting, data=data, partial=True)
-
-    if not meeting_serializer.is_valid():
-        return Response(status=status.HTTP_400_BAD_REQUEST, data=meeting_serializer.errors)
-
-    meeting = meeting_serializer.save()
-
-    timeslot_serializer = TimeSlotSerializer(data=timeslots, many=True)
-
-    if not timeslot_serializer.is_valid():
-        return Response(status=status.HTTP_400_BAD_REQUEST, data=timeslot_serializer.errors)
-
-    timeslots_data = timeslot_serializer.data
-    for ts_data in timeslots_data:
-        ts_data["schedule_pool_id"] = SchedulePool.objects.create(
-            meeting=meeting,
-            voting_start_date=meeting.creation_date,
-            voting_deadline=meeting.deadline
-        )
-
-    timeslots = TimeSlot.objects.bulk_create(
-        map(lambda item: TimeSlot(**item), timeslots_data)
-    )
-
-    meeting.timeslots = timeslots
-    return Response(status=status.HTTP_200_OK, data=MeetingTimeSlotSerializer(meeting).data)
 
 @api_view(['POST'])
 def api_meetings_create(request):
@@ -182,6 +131,7 @@ def api_meetings_delete(request, meeting_id):
     meeting.delete()
     return JsonResponse({'message': 'Meeting deleted successfully'}, status=204)
 
+
 @api_view(['POST'])
 def api_feedback_create(request):
     data = request.data
@@ -197,30 +147,50 @@ def api_feedback_create(request):
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+
+
+@api_view(['GET'])
+def api_feedback_detail(request, feedback_id):
+    feedback = Feedback.objects.filter(pk=feedback_id)
+    if feedback is not None:
+        return Response(status=status.HTTP_200_OK, data=FeedbackSerializer(feedback).data)
+
+@api_view(['GET'])
+def api_feedback_detail(request, feedback_id):
+    feedback = Feedback.objects.filter(pk=feedback_id)
+    if feedback is not None:
+        return Response(status=status.HTTP_200_OK, data=FeedbackSerializer(feedback).data)
+
+@api_view(['GET'])
+def api_feedbacks(request):
+    feedback = Feedback.objects.all()
+    if feedback is not None:
+        return Response(status=status.HTTP_200_OK, data=FeedbackSerializer(feedback, many=True).data)
     
 
-@api_view(['POST'])
-def api_participant_preference_create(request):
-    if request.method == 'POST':
-        data = request.data.copy()
+# @api_view(['POST'])
+# def api_participant_preference_create(request):
+#     if request.method == 'POST':
+#         data = request.data.copy()
 
-        # Extract time slots and format them
-        selected_timeslots = data.get('selected_timeslots', [])
-        formatted_timeslots = [
-            {
-                "start_date": slot.get("start_date"),
-                "end_date": slot.get("end_date"),
-                "preference": slot.get("preference", ParticipantPreference.YES),
-            }
-            for slot in selected_timeslots
-        ]
-        data['selected_timeslots'] = formatted_timeslots
+#         # Extract time slots and format them
+#         selected_timeslots = data.get('selected_timeslots', [])
+#         formatted_timeslots = [
+#             {
+#                 "start_date": slot.get("start_date"),
+#                 "end_date": slot.get("end_date"),
+#                 "preference": slot.get("preference", ParticipantPreference.YES),
+#             }
+#             for slot in selected_timeslots
+#         ]
+#         data['selected_timeslots'] = formatted_timeslots
 
-        serializer = ParticipantPreferenceSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+#         serializer = ParticipantPreferenceSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=201)
+#         return Response(serializer.errors, status=400)
+
 
 # class UserRegister(APIView):
 # 	permission_classes = (permissions.AllowAny,)

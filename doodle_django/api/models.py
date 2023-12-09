@@ -5,7 +5,7 @@ from django.utils.timezone import *
 from django.contrib.auth import get_user_model
 
 class VideoType(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -125,7 +125,7 @@ class Meeting(models.Model):
     )
 
 class SchedulePool(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -137,7 +137,7 @@ class SchedulePool(models.Model):
     )
 
 class SchedulePoolLink(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -153,7 +153,7 @@ class SchedulePoolLink(models.Model):
     )
 
 class Vote(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -181,7 +181,7 @@ class Vote(models.Model):
     )
 
 class Feedback(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -215,7 +215,7 @@ class Feedback(models.Model):
     )
 
 class FeedbackAttachment(models.Model):
-    id = models.AutoField(
+    id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
@@ -232,31 +232,31 @@ class FeedbackAttachment(models.Model):
     )
     
     
-class CustomTimeSlot(models.Model):
-    '''
-    REMOVED SOON, USE VOTE INSTEAD
-    '''
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    preference = models.CharField(max_length=10, default='yes')
-    participant_preference = models.ForeignKey('ParticipantPreference', related_name='time_slots', on_delete=models.CASCADE)
+# class CustomTimeSlot(models.Model):
+#     '''
+#     REMOVED SOON, USE VOTE INSTEAD
+#     '''
+#     start_date = models.DateTimeField()
+#     end_date = models.DateTimeField()
+#     preference = models.CharField(max_length=10, default='yes')
+#     participant_preference = models.ForeignKey('ParticipantPreference', related_name='time_slots', on_delete=models.CASCADE)
 
-class ParticipantPreference(models.Model):
-    '''
-    REMOVED SOON, USE VOTE INSTEAD
-    '''
-    YES = 'yes'
-    MAYBE = 'maybe'
-    NO = 'no'
+# class ParticipantPreference(models.Model):
+#     '''
+#     REMOVED SOON, USE VOTE INSTEAD
+#     '''
+#     YES = 'yes'
+#     MAYBE = 'maybe'
+#     NO = 'no'
 
-    PREFERENCE_CHOICES = [
-        (YES, 'Yes'),
-        (MAYBE, 'Maybe'),
-        (NO, 'No'),
-    ]
+#     PREFERENCE_CHOICES = [
+#         (YES, 'Yes'),
+#         (MAYBE, 'Maybe'),
+#         (NO, 'No'),
+#     ]
 
-    selected_timeslots = models.ManyToManyField(TimeSlot)
-    preference = models.CharField(
-        max_length=10, choices=PREFERENCE_CHOICES, default=YES
+    # selected_timeslots = models.ManyToManyField(TimeSlot)
+    # preference = models.CharField(
+    #     max_length=10, choices=PREFERENCE_CHOICES, default=YES
 
-    )
+    # )

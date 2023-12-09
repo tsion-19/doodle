@@ -6,56 +6,22 @@ from django.core.validators import *
 from . models import *
 from django.contrib.auth import get_user_model,authenticate
 
-class TimeSlotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeSlot
-        fields = ['start_date', 'end_date', 'preference']
+# class ParticipantPreferenceSerializer(serializers.ModelSerializer):
+#     selected_timeslots = TimeSlotSerializer(many=True)
 
-class ParticipantPreferenceSerializer(serializers.ModelSerializer):
-    selected_timeslots = TimeSlotSerializer(many=True)
-
-    class Meta:
-        model = ParticipantPreference
-        fields = ['selected_timeslots']
-
-    def create(self, validated_data):
-        selected_timeslots_data = validated_data.pop('selected_timeslots')
-        instance = ParticipantPreference.objects.create(**validated_data)
-
-        for time_slot_data in selected_timeslots_data:
-            instance.selected_timeslots.create(**time_slot_data)
-
-        return instance
-# UserModel = get_user_model()
-
-# class UserSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'email']
-# class UserRegisterSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = UserModel
-# 		fields = '__all__'
-# 	def create(self, clean_data):
-# 		user_obj = UserModel.objects.create_user(email=clean_data['email'], password=clean_data['password'])
-# 		user_obj.username = clean_data['username']
-# 		user_obj.save()
-# 		return user_obj
+#         model = ParticipantPreference
+#         fields = ['selected_timeslots']
 
-# class UserLoginSerializer(serializers.Serializer):
-# 	email = serializers.EmailField()
-# 	password = serializers.CharField()
-# 	##
-# 	def check_user(self, clean_data):
-# 		user = authenticate(username=clean_data['email'], password=clean_data['password'])
-# 		if not user:
-# 			raise serializers.ValidationError('user not found')
-# 		return user
+#     def create(self, validated_data):
+#         selected_timeslots_data = validated_data.pop('selected_timeslots')
+#         instance = ParticipantPreference.objects.create(**validated_data)
 
-# class UserSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = UserModel
-# 		fields = ('email', 'username')
+#         for time_slot_data in selected_timeslots_data:
+#             instance.selected_timeslots.create(**time_slot_data)
+
+#         return instance
+
 class MeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting
