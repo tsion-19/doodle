@@ -14,6 +14,8 @@ import axios from "axios";
 import "../CreationMeeting/createGroup.css";
 import SecondaryButton from "../Utils/SecondaryButton";
 import PrimaryButton from "../Utils/PrimaryButton";
+import { useNavigate } from "react-router-dom";
+import { WindowSharp } from "@mui/icons-material";
 
 const PreferenceVoteContainer = ({ news, data }) => {
   const getToken = () => sessionStorage.getItem("token");
@@ -38,6 +40,8 @@ const PreferenceVoteContainer = ({ news, data }) => {
   const deleteFields = () => {
     setSelectedDates([]);
   };
+
+  let navigate = useNavigate();
 
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -103,7 +107,6 @@ const PreferenceVoteContainer = ({ news, data }) => {
           }
         );
       }
-      alert("Timeslot booked!");
       window.location.reload();
       deleteFields();
     } catch (e) {}
@@ -117,109 +120,73 @@ const PreferenceVoteContainer = ({ news, data }) => {
   };
 
   return (
-    <div className="CreateGroup">
+    <div className="field">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid className="sx_news" item xs={2}>
-            <News news={news} start={0} numberOfDivsNews={3} />
-          </Grid>
-          <Grid
-            style={{
-              marginTop: 32,
-              paddingLeft: 0,
-            }}
-            item
-            xs={8}>
-            <div className="field">
-              <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <div className="questions_answers">
-                      <p className="question">
-                        Are you usually busy these days?
-                      </p>
-                      <p className="answer">
-                        You can propose your time-slots now!
-                      </p>
-                      <p className="question">
-                        Do you have to go shopping these days?
-                      </p>
-                      <p className="answer">
-                        You can propose new time-slots now!
-                      </p>
-                      <p className="question">
-                        Do you have to go to the gym and are usually exhausted
-                        afterwards?
-                      </p>
-                      <p className="answer">
-                        You can propose time-slots after your rest now!
-                      </p>
-                      <p className="question">
-                        Don't you like daylight and stay up at night?
-                      </p>
-                      <p className="answer">
-                        You can propose time-slots during the night now!
-                      </p>
-                      <p className="question">
-                        Don't you like meetings and people?
-                      </p>
-                      <p className="answer">
-                        Sorry there is no way to skip the meeting now!
-                      </p>
-                    </div>
-                  </Grid>
-                  <Grid
-                    style={{ marginTop: "auto", marginBottom: "auto" }}
-                    item
-                    xs={4}>
-                    {showYourPreference ? (
-                      <img
-                        className="border_image"
-                        src={bad_schedule}
-                        alt="Bad schedule"></img>
-                    ) : (
-                      <img
-                        className="border_image"
-                        src={schedule}
-                        alt="Schedule"></img>
-                    )}
-                  </Grid>
-                </Grid>
-              </Box>
-              <SecondaryButton
-                style={{ marginTop: 20, marginBottom: 20, marginLeft: 15 }}
-                functionOnClick={buttonShowYourPreference}
-                variant="contained"
-                text="Propose your timeslots"
-              />
-              {showYourPreference ? (
-                <div style={{ paddingLeft: 15 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <OurCalendar
-                      style={{ marginBottom: 20 }}
-                      selectedDates={selectedDates}
-                      setSelectedDates={setSelectedDates}
-                      errorDate={errorDate}
-                    />
-                  </div>
-                  <PrimaryButton
-                    style={{ marginTop: "20px !important", marginBottom: 20 }}
-                    functionOnClick={(e) => buttonSendYourPreference(e)}
-                    variant="contained"
-                    type="submit"
-                    text="Send your timeslots"
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
+          <Grid item xs={8}>
+            <div className="questions_answers">
+              <p className="question">Are you usually busy these days?</p>
+              <p className="answer">You can propose your time-slots now!</p>
+              <p className="question">Do you have to go shopping these days?</p>
+              <p className="answer">You can propose new time-slots now!</p>
+              <p className="question">
+                Do you have to go to the gym and are usually exhausted
+                afterwards?
+              </p>
+              <p className="answer">
+                You can propose time-slots after your rest now!
+              </p>
+              <p className="question">
+                Don't you like daylight and stay up at night?
+              </p>
+              <p className="answer">
+                You can propose time-slots during the night now!
+              </p>
+              <p className="question">Don't you like meetings and people?</p>
+              <p className="answer">
+                Sorry there is no way to skip the meeting now!
+              </p>
             </div>
           </Grid>
-          <Grid className="dx_news" item xs={2}>
-            <News news={news} start={3} numberOfDivsNews={6} />
+          <Grid style={{ marginTop: "auto", marginBottom: "auto" }} item xs={4}>
+            {showYourPreference ? (
+              <img
+                className="border_image"
+                src={bad_schedule}
+                alt="Bad schedule"></img>
+            ) : (
+              <img className="border_image" src={schedule} alt="Schedule"></img>
+            )}
           </Grid>
         </Grid>
       </Box>
+      <SecondaryButton
+        style={{ marginTop: 20, marginBottom: 20, marginLeft: 15 }}
+        functionOnClick={buttonShowYourPreference}
+        variant="contained"
+        text="Propose your timeslots"
+      />
+      {showYourPreference ? (
+        <div style={{ paddingLeft: 15 }}>
+          <div style={{ marginBottom: 20 }}>
+            <OurCalendar
+              style={{ marginBottom: 20 }}
+              selectedDates={selectedDates}
+              setSelectedDates={setSelectedDates}
+              errorDate={errorDate}
+            />
+          </div>
+          <PrimaryButton
+            style={{ marginTop: "20px !important", marginBottom: 20 }}
+            functionOnClick={(e) => buttonSendYourPreference(e)}
+            variant="contained"
+            type="submit"
+            text="Send your timeslots"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

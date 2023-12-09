@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import "../CreationMeeting/createGroup.css";
@@ -9,47 +8,9 @@ import "../ManageMeeting/manage.css";
 import UserPreference from "../User/UserPreference";
 import News from "../CreationMeeting/News";
 import TableMeetingUser from "../User/TableMeetingUser";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
-import { styled } from "@mui/material/styles";
-import axios from "axios";
+import Preference from "../../pages/Preference";
 
 const User = ({ news, data }) => {
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[600]),
-    backgroundColor: grey[600],
-    "&:hover": {
-      backgroundColor: grey[700],
-    },
-  }));
-
-  const getToken = () => sessionStorage.getItem("token");
-
-  // const submitForm = async () => {
-  //   let variable = null;
-  //   console.log("selected", selectedColumn);
-  //   if (selectedColumn !== "")
-  //     variable = data["timeslots"][selectedColumn - 1]["id"];
-
-  //   try {
-  //     await axios.post(
-  //       "http://127.0.0.1:8000/api/meeting/" + data["id"] + "/book/",
-  //       {
-  //         final_date: variable,
-  //       },
-  //       {
-  //         headers: {
-  //           authorization: `Token ${getToken()}`,
-  //         },
-  //       }
-  //     );
-  //     alert("Timeslot booked!");
-  //     window.location.reload();
-  //   } catch (e) {
-  //     // console.log("sth failed", e);
-  //   }
-  // };
-
   const [selectedColumn, setSelectedColumn] = useState([]);
 
   useEffect(() => {
@@ -76,7 +37,6 @@ const User = ({ news, data }) => {
     }
   };
 
-  
   return (
     <div className="CreateGroup">
       <Box sx={{ flexGrow: 1 }}>
@@ -92,7 +52,11 @@ const User = ({ news, data }) => {
                 <UserPreference data={data} />
 
                 {/* Vertical Divider */}
-                <Divider orientation="vertical" flexItem style={{ margin: "0 16px" }} />
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  style={{ margin: "0 16px" }}
+                />
 
                 {/* TableMeetingUser Component */}
                 <TableMeetingUser
@@ -101,16 +65,9 @@ const User = ({ news, data }) => {
                   columnSelection={columnSelection}
                 />
               </Box>
-
-              {/* <div style={{ textAlign: "end" }}>
-                <ColorButton
-                  style={{ margin: 20, textAlign: "end" }}
-                  onClick={submitForm}
-                  variant="contained"
-                >
-                  Submit
-                </ColorButton>
-              </div> */}
+            </div>
+            <div style={{ paddingTop: 5 }}>
+              <Preference />
             </div>
           </Grid>
           <Grid className="dx_news" item xs={2}>

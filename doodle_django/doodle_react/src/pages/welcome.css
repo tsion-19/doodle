@@ -1,0 +1,9 @@
+.no_style_a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+#field_hover:hover {
+  background-color: #d1c3bb;
+}

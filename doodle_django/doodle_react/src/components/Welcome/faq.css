@@ -1,0 +1,9 @@
+.question-answer {
+  padding-bottom: 20px;
+}
+
+.faq > hr {
+  border: 1px solid #827066;
+  width: 200px;
+  margin: auto;
+}

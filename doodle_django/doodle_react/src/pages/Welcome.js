@@ -1,89 +1,71 @@
-import {
-  Card,
-  Box,
-  Typography,
-  CardContent,
-  Button,
-  CardActionArea,
-  CardActions,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import "./welcome.css";
+import Team from "../components/Welcome/Team";
+import Faq from "../components/Welcome/Faq";
+import Features from "../components/Welcome/Features";
 
 function Welcome() {
-  const cardData = [
-    {
-      id: "1",
-      title: "Group poll",
-      content: "choose your times",
-      link: "/create",
-    },
-    { id: "2", title: "1:1", content: "ask one on one", link: "/" },
-    {
-      id: "3",
-      title: "Booking Page",
-      content: "book group poll",
-      link: "/register",
-    },
-  ];
-
   return (
     <div>
-      <Card
-        className="welcome"
-        sx={{
-          //   bgcolor: "rgb(167, 178, 187)",
-          background:
-            "linear-gradient(-45deg, #73d3b6f3, #65d4e7de, #67a9e79a, #cc9ee7)",
-          alignSelf: "center",
-          justifyContent: "center",
-          marginTop: 5,
-          display: "flex",
-          alignItems: "center",
-          width: 800,
-          height: 200,
-          ml: 45,
-        }}>
-        <Box className="box">
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h4">
-              Welcome to Doodle Unical
-            </Typography>
-          </CardContent>
-          <Box
-            sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}></Box>
-        </Box>
-      </Card>
-      <div className="card" style={{ display: "flex" }}>
-        {" "}
-        {cardData.map((card) => (
-          <Card
-            className="cards"
-            key={card.id}
-            sx={{
-              marginTop: 10,
-              width: "100%",
-              direction: "row",
-              alignItems: "center",
-              bgcolor: "rgb(167, 178, 187)",
-              ml: 5,
-              mr: 10,
-            }}>
-            <CardActionArea>
-              <Typography variant="h4">{card.title}</Typography>
-            </CardActionArea>
-            <CardActionArea>
-              <Typography variant="h6" sx={{ marginTop: 5 }}>
-                {card.content}
-              </Typography>
-            </CardActionArea>
-            <CardActions style={{ justifyContent: "center" }}>
-              <Link to={card.link} sx={{ color: "teal" }}>
-                <Button>create</Button>
-              </Link>
-            </CardActions>
-          </Card>
-        ))}
-      </div>
+      <Grid container spacing={2}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={5}>
+          <h3>Find the Perfect Day for Your Meeting!</h3>
+          <p>
+            Are you tired of endless emails to arrange a date? We are here to
+            make the process easier! With Doodle Unical, planning a meeting
+            becomes a stress-free experience.
+          </p>
+          <p>
+            Forget the difficulties of trying to coordinate everyone's
+            availability. Our intuitive platform will guide you step by step to
+            find the ideal day that works for all participants. Save precious
+            time and focus your energy on the content of your meeting.
+          </p>
+          <p>
+            With Doodle Unical, we make meeting planning a seamless,
+            collaborative experience. Choose the perfect day in just a few
+            clicks and enjoy more productive meetings!
+          </p>
+          <p>
+            With Doodle Unical, we make meeting planning a seamless,
+            collaborative experience. Choose the perfect day in just a few
+            clicks and enjoy more productive meetings!
+          </p>
+          <p>
+            Join us in the mission to simplify your schedule. Start planning a
+            stress-free meeting today and focus on what matters most to you and
+            your team!
+          </p>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={4} style={{ marginTop: "auto", marginBottom: "auto" }}>
+          <div>
+            <a href={"/create"} className="no_style_a">
+              <div className="field" id="field_hover">
+                <h2>Create pool</h2>
+                <p>to chose the perfect meeting day</p>
+              </div>
+            </a>
+            <br />
+            <br />
+            <br />
+            <br />
+            <a href={"/dashboard"} className="no_style_a">
+              <div className="field" id="field_hover">
+                <h2>Manage pool</h2>
+                <p>to edit and book the perfect day</p>
+              </div>
+            </a>
+          </div>
+        </Grid>
+      </Grid>
+      <Features />
+      <br />
+      <Team />
+      <br />
+      <Faq />
+      <br />
     </div>
   );
 }

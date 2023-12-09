@@ -1,0 +1,64 @@
+.team-detail > img {
+  width: -webkit-fill-available;
+  border-radius: 50%;
+  border: solid 4px #d1c3bb;
+  display: block;
+  height: auto;
+}
+
+.team-detail {
+  text-align: center;
+  font-style: italic;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.team-detail > h4 {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.team-name {
+  color: #827066;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.team-container:hover .overlay {
+  opacity: 1;
+}
+
+.team-container {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.5s ease;
+  background-color: #d1c3bb;
+  border-radius: 50%;
+}
+
+.team-detail > p {
+  margin-block-start: 0.5em;
+}
+
+.team > hr {
+  border: 1px solid #d1c3bb;
+  width: 200px;
+  margin: auto;
+}

@@ -1,0 +1,16 @@
+.features > hr {
+  border: 1px solid #827066;
+  width: 200px;
+  margin: auto;
+}
+
+.feature_image,
+.feature_image_details {
+  width: -webkit-fill-available;
+}
+
+.feature_image_details {
+  /* width: 20%; */
+  background-color: #f0e4dd;
+  border-radius: 50%;
+}
