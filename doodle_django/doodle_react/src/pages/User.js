@@ -2,15 +2,14 @@ import UserContainer from "../components/User/UserContainer";
 import news from "../news.json";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Preference from "./Preference";
 
-const Preference = () => {
+const User = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const meetingId =
     searchParams.get("id") !== null ? searchParams.get("id") : -1;
-
-  // console.log("FROM", meetingId);
 
   news.sort(() => Math.random() - 0.5);
 
@@ -54,4 +53,4 @@ const Preference = () => {
   );
 };
 
-export default Preference;
+export default User;
