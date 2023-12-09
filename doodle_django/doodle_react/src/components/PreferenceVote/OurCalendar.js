@@ -5,25 +5,11 @@ import "react-time-picker/dist/TimePicker.css";
 import { useState } from "react";
 import "../CreationMeeting/createGroupPolly.css";
 
-const OurCalendar = ({ selectedDates, setSelectedDates, data }) => {
+const OurCalendar = ({ selectedDates, setSelectedDates, errorDate }) => {
   const [selectedTimeRange, setSelectedTimeRange] = useState([
     "09:00",
     "10:00",
   ]);
-
-  const calculateDuration = (startTime, endTime) => {
-    const start = new Date(`1970-01-01T${startTime}`);
-    const end = new Date(`1970-01-01T${endTime}`);
-    const durationInMilliseconds = end - start;
-
-    const pad = (num) => num.toString().padStart(2, "0");
-
-    const hours = pad(Math.floor(durationInMilliseconds / 3600000));
-    const minutes = pad(Math.floor((durationInMilliseconds % 3600000) / 60000));
-    const seconds = pad(Math.floor((durationInMilliseconds % 60000) / 1000));
-
-    return `${hours}:${minutes}:${seconds}`;
-  };
 
   const handleDateClick = (value) => {
     const dateIndex = selectedDates.findIndex(
@@ -54,14 +40,6 @@ const OurCalendar = ({ selectedDates, setSelectedDates, data }) => {
   const tileDisabled = ({ date, view }) =>
     view === "month" && date < new Date();
 
-  const [error, setError] = useState(false);
-  const [title, setTitle] = useState("");
-
-  const updateTitle = (newTitle) => {
-    setTitle(newTitle);
-    if (newTitle !== "") setError(false);
-  };
-
   return (
     <div>
       <div style={{ display: "flex" }}>
@@ -85,9 +63,11 @@ const OurCalendar = ({ selectedDates, setSelectedDates, data }) => {
               ))}
             </ul>
           ) : (
-            <p>No dates selected</p>
+            <div>
+              {!errorDate && <p className="no_error">No dates selected</p>}
+              {errorDate && <p className="error">No dates selected</p>}
+            </div>
           )}
-
           <div>
             <h2>Select Time Range:</h2>
             <div>

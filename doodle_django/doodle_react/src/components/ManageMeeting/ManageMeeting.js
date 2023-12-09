@@ -3,15 +3,7 @@ import timeImage from "../images/time.png";
 import locationImage from "../images/location.png";
 import videoImage from "../images/video.png";
 import descriptionImage from "../images/description.png";
-import correctImage from "../images/correct.png";
-import noImage from "../images/no.png";
-import waitImage from "../images/wait.png";
-import maybeImage from "../images/maybe.png";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
-// import * as React from "react";
-import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import "./manage.css";
@@ -20,25 +12,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditableMeeting from "./EditMeetingForm";
 import DeleteConfirmation from "./DeleteConfirmation";
-import { Navigate } from "react-router-dom";
+import SecondaryButton from "../Utils/SecondaryButton";
 
 const ManageMeeting = ({ data }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[600]),
-    backgroundColor: grey[600],
-    "&:hover": {
-      backgroundColor: grey[700],
-    },
-  }));
 
-  const ColorButton2 = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[50]),
-    backgroundColor: grey[50],
-    "&:hover": {
-      backgroundColor: grey[50],
-    },
-  }));
   const [editConfirmation, setEditConfirmation] = useState(false);
   const [updatedMeeting, setUpdatedMeeting] = useState(null);
   const [editMode, setEditMode] = React.useState(false);
@@ -47,12 +25,10 @@ const ManageMeeting = ({ data }) => {
   };
 
   const onDelete = async (id) => {
-    // Show the confirmation box
     setShowDeleteConfirmation(true);
   };
 
   const handleCancelDelete = () => {
-    // Hide the confirmation box
     setShowDeleteConfirmation(false);
   };
 
@@ -141,7 +117,7 @@ const ManageMeeting = ({ data }) => {
                 )}
                 {!editConfirmation && !updatedMeeting && (
                   <>
-                    <h2>{data.title}</h2>
+                    <h2 style={{ textAlign: "center" }}>{data.title}</h2>
                     <div className="manage_div_info">
                       <img src={timeImage} alt="time.png" />
                       <nobr>{data.duration}</nobr>
@@ -172,79 +148,35 @@ const ManageMeeting = ({ data }) => {
           </Grid>
           <Grid item xs={6}>
             <div style={{ textAlign: "end" }}>
-              <div style={{ width: "-webkit-fill-available" }}>
-                {/* <ColorButton2
+              <div style={{ width: "-webkit-fill-available", margin: 20 }}>
+                <SecondaryButton
                   style={{ width: 100, margin: 20, textAlign: "end" }}
-                  onClick={onEdit}
+                  functionOnClick={onEdit}
                   variant="contained"
-                >
-                  Edit
-                </ColorButton2> */}
-                <ColorButton2
-                  style={{ width: 100, margin: 20, textAlign: "end" }}
-                  onClick={() => onEdit()} // Corrected the onClick event
-                  variant="contained">
-                  Edit
-                </ColorButton2>
+                  text="Edit"
+                />
               </div>
-              <div style={{ width: "-webkit-fill-available" }}>
-                <ColorButton2
+              <div style={{ width: "-webkit-fill-available", margin: 20 }}>
+                <SecondaryButton
                   style={{
                     width: 100,
                     margin: 20,
                     textAlign: "end",
                     color: "#757575",
                   }}
-                  onClick={onDelete}
-                  variant="contained">
-                  Delete
-                </ColorButton2>
-              </div>
-              <div style={{ width: "-webkit-fill-available" }}>
-                <ColorButton
-                  style={{ width: 100, margin: 20, textAlign: "end" }}
-                  // onClick={console.log("share")}
-                  variant="contained">
-                  Share
-                </ColorButton>
+                  text="Delete"
+                  functionOnClick={onDelete}
+                  variant="contained"
+                />
               </div>
             </div>
           </Grid>
-          <Box sx={{ flexGrow: 1, marginTop: 5 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <h4 style={{ marginLeft: 20, marginTop: 15 }}>
-                  Availabilities
-                </h4>
-              </Grid>
-              <Grid item xs={8}>
-                <nobr className="manage_nobr_info">
-                  <img src={correctImage} alt="correct.png" />
-                  <nobr>Yes</nobr>
-                </nobr>
-                <nobr className="manage_nobr_info">
-                  <img src={maybeImage} alt="maybe.png" />
-                  <nobr>Maybe</nobr>
-                </nobr>
-                <nobr className="manage_nobr_info">
-                  <img src={noImage} alt="no.png" />
-                  <nobr>No</nobr>
-                </nobr>
-                <nobr className="manage_nobr_info">
-                  <img src={waitImage} alt="wait.png" />
-                  <nobr>Wait</nobr>
-                </nobr>
-              </Grid>
-              <Grid container spacing={2}>
-                <DeleteConfirmation
-                  show={showDeleteConfirmation}
-                  onCancel={handleCancelDelete}
-                  onConfirm={handleConfirmDelete}
-                  meetingTitle={data.title} // Pass the meeting title to the confirmation box
-                />
-              </Grid>
-            </Grid>
-          </Box>
+          <DeleteConfirmation
+            show={showDeleteConfirmation}
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+            meetingTitle={data.title}
+          />
         </Grid>
       </Box>
     </div>

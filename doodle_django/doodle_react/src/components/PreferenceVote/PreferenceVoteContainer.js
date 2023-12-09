@@ -5,9 +5,6 @@ import "../CreationMeeting/createGroupPolly.css";
 import "../ManageMeeting/manage.css";
 import News from "../CreationMeeting/News";
 import "../ManageMeeting/manage.css";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
-import { styled } from "@mui/material/styles";
 import OurCalendar from "../PreferenceVote/OurCalendar";
 import { useState } from "react";
 import "./preferences.css";
@@ -15,27 +12,14 @@ import schedule from "../images/schedule.jpg";
 import bad_schedule from "../images/bad_schedule.jpg";
 import axios from "axios";
 import "../CreationMeeting/createGroup.css";
+import SecondaryButton from "../Utils/SecondaryButton";
+import PrimaryButton from "../Utils/PrimaryButton";
 
 const PreferenceVoteContainer = ({ news, data }) => {
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[600]),
-    backgroundColor: grey[600],
-    "&:hover": {
-      backgroundColor: grey[700],
-    },
-  }));
-
-  const ColorButton2 = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[50]),
-    backgroundColor: grey[50],
-    "&:hover": {
-      backgroundColor: grey[50],
-    },
-  }));
-
   const getToken = () => sessionStorage.getItem("token");
 
   const [showYourPreference, setShowYourPreference] = useState(false);
+  const [errorDate, setErrorDate] = useState(false);
 
   const buttonShowYourPreference = () => {
     showYourPreference
@@ -44,7 +28,10 @@ const PreferenceVoteContainer = ({ news, data }) => {
   };
 
   const checkRequirements = () => {
-    if (selectedDates.length <= 0) return false;
+    if (selectedDates.length <= 0) {
+      setErrorDate(true);
+      return false;
+    }
     return true;
   };
 
@@ -199,26 +186,29 @@ const PreferenceVoteContainer = ({ news, data }) => {
                   </Grid>
                 </Grid>
               </Box>
-              <ColorButton2
+              <SecondaryButton
                 style={{ marginTop: 20, marginBottom: 20, marginLeft: 15 }}
-                onClick={buttonShowYourPreference}
-                variant="contained">
-                Propose your timeslots
-              </ColorButton2>
+                functionOnClick={buttonShowYourPreference}
+                variant="contained"
+                text="Propose your timeslots"
+              />
               {showYourPreference ? (
                 <div style={{ paddingLeft: 15 }}>
-                  <OurCalendar
-                    selectedDates={selectedDates}
-                    setSelectedDates={setSelectedDates}
-                    data={data}
-                  />
-                  <ColorButton
-                    style={{ marginTop: 20, marginBottom: 20 }}
-                    onClick={(e) => buttonSendYourPreference(e)}
+                  <div style={{ marginBottom: 20 }}>
+                    <OurCalendar
+                      style={{ marginBottom: 20 }}
+                      selectedDates={selectedDates}
+                      setSelectedDates={setSelectedDates}
+                      errorDate={errorDate}
+                    />
+                  </div>
+                  <PrimaryButton
+                    style={{ marginTop: "20px !important", marginBottom: 20 }}
+                    functionOnClick={(e) => buttonSendYourPreference(e)}
                     variant="contained"
-                    type="submit">
-                    Send your timeslots
-                  </ColorButton>
+                    type="submit"
+                    text="Send your timeslots"
+                  />
                 </div>
               ) : (
                 <></>

@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import "./createGroup.css";
@@ -34,8 +33,7 @@ const CreateGroup = ({
           },
         }}
         noValidate
-        autoComplete="off"
-      >
+        autoComplete="off">
         <div className="form_creation">
           <TextField
             required
@@ -44,7 +42,15 @@ const CreateGroup = ({
             id="title-outlined-required"
             label="Title"
             value={title}
+            style={{
+              backgroundColor: "white",
+            }}
             onChange={(e) => setTitle(e.target.value)}
+            InputLabelProps={{
+              style: {
+                fontFamily: "Quicksand",
+              },
+            }}
           />
         </div>
 
@@ -53,9 +59,17 @@ const CreateGroup = ({
             id="outlined-multiline-flexible"
             label="Description"
             multiline
+            style={{
+              backgroundColor: "white",
+            }}
             maxRows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            InputLabelProps={{
+              style: {
+                fontFamily: "Quicksand",
+              },
+            }}
           />
         </div>
 
@@ -64,7 +78,15 @@ const CreateGroup = ({
             id="outlined"
             label="Location"
             value={location}
+            style={{
+              backgroundColor: "white",
+            }}
             onChange={(e) => setLocation(e.target.value)}
+            InputLabelProps={{
+              style: {
+                fontFamily: "Quicksand",
+              },
+            }}
           />
         </div>
         <SwitchSelect

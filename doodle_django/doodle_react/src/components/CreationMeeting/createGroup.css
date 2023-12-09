@@ -4,22 +4,24 @@
 .title {
   font-size: 32px;
   font-weight: bold;
-  text-align: center;
-  padding-top: 20px;
+  text-align: left;
+  padding-top: 50px;
+  padding-left: 80px;
+  margin-block-start: 0em;
 }
 
 .field {
-  background-color: white;
-  box-shadow: 0 0 10px #858585;
+  background-color: #f7f5f4;
+  box-shadow: 0 0 10px #827066;
   border-radius: 10px;
   height: fit-content;
-}
-
-.switch {
-  margin: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form_creation {
-  padding-left: 15px;
+  padding-left: 25px;
+  padding-right: 10px;
 }

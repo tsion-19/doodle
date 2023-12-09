@@ -4,6 +4,8 @@ import waitImage from "../images/wait.png";
 import maybeImage from "../images/maybe.png";
 import user from "../images/user.png";
 import "./manage.css";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 const TableMeeting = ({ selectedColumn, columnSelection, data }) => {
   const renderCellContent = (column, row) => {
@@ -34,25 +36,8 @@ const TableMeeting = ({ selectedColumn, columnSelection, data }) => {
     }
   };
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const time_slots = [
-    // Il nuovo valore che desideri aggiungere
     {},
-    // ... altri valori esistenti in data["timeslots"]
     ...(Array.isArray(data["timeslots"]) ? data["timeslots"] : []),
   ];
 
@@ -81,14 +66,41 @@ const TableMeeting = ({ selectedColumn, columnSelection, data }) => {
 
   return (
     <div>
+      <Box sx={{ flexGrow: 1, marginTop: 5 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <h4 style={{ marginLeft: 40, marginTop: 15 }}>Availabilities</h4>
+          </Grid>
+          <Grid item xs={8}>
+            <nobr className="manage_nobr_info">
+              <img src={correctImage} alt="correct.png" />
+              <nobr>Yes</nobr>
+            </nobr>
+            <nobr className="manage_nobr_info">
+              <img src={maybeImage} alt="maybe.png" />
+              <nobr>Maybe</nobr>
+            </nobr>
+            <nobr className="manage_nobr_info">
+              <img src={noImage} alt="no.png" />
+              <nobr>No</nobr>
+            </nobr>
+            <nobr className="manage_nobr_info">
+              <img src={waitImage} alt="wait.png" />
+              <nobr>Wait</nobr>
+            </nobr>
+          </Grid>
+        </Grid>
+      </Box>
       <table
         id="table_meeting"
         style={{
-          border: "3px solid #f5f5f5",
+          // border: "3px solid #f0e9e6",
           borderRadius: "8px",
           width: "-webkit-fill-available",
           marginRight: "15px",
           marginLeft: "15px",
+          borderCollapse: "collapse",
+          borderSpacing: 0,
         }}>
         <thead>
           <tr>
@@ -109,7 +121,10 @@ const TableMeeting = ({ selectedColumn, columnSelection, data }) => {
                 return (
                   <th
                     key={index}
-                    style={{ position: "relative", minWidth: "100px" }}
+                    style={{
+                      position: "relative",
+                      minWidth: "100px",
+                    }}
                     onClick={() => columnSelection(index)}
                     className={
                       selectedColumn === index ? "selected_column" : ""

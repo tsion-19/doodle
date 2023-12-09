@@ -1,4 +1,5 @@
 import "./App.css";
+import "./index.css";
 import Navbar from "./pages/Navbar";
 import Welcome from "./pages/Welcome";
 import { ToastContainer } from "react-toastify";

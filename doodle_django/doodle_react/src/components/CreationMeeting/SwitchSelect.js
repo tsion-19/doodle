@@ -1,5 +1,4 @@
-import * as React from "react";
-import { grey } from "@mui/material/colors";
+import { brown } from "@mui/material/colors";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Select, { components } from "react-select";
@@ -7,13 +6,13 @@ import { alpha, styled } from "@mui/material/styles";
 
 const PinkSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
-    color: grey[600],
+    color: brown[300],
     "&:hover": {
-      backgroundColor: alpha(grey[900], theme.palette.action.hoverOpacity),
+      backgroundColor: alpha(brown[200], theme.palette.action.hoverOpacity),
     },
   },
   "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-    backgroundColor: grey[900],
+    backgroundColor: brown[200],
   },
 }));
 
@@ -53,7 +52,9 @@ const IconSingleValue = (props) => (
       style={{ width: 16, marginBottom: -2 }}
       alt={props.data.label}
     />
-    <nobr style={{ marginLeft: 5, color: "#757575" }}>{props.data.label}</nobr>
+    <nobr style={{ marginLeft: 5, color: "#59483e", fontWeight: "bold" }}>
+      {props.data.label}
+    </nobr>
   </SingleValue>
 );
 
@@ -69,13 +70,24 @@ const SwitchSelect = ({
   };
 
   return (
-    <div className="switch">
+    <div
+      className="switch"
+      style={{
+        paddingLeft: 50,
+        paddingRight: 50,
+        marginTop: 0,
+      }}>
       <FormControlLabel
         control={<PinkSwitch checked={checked} onChange={setChecked} />}
-        label="Video conferencing"
+        label={
+          <span style={{ fontFamily: "Quicksand, sans-serif" }}>
+            Video conferencing
+          </span>
+        }
       />
       {checked === true && (
         <Select
+          style={{ fontFamily: "Quicksand !important" }}
           img
           defaultValue={options[0]}
           options={options}
