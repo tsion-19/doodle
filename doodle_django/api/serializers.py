@@ -11,21 +11,19 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         model = TimeSlot
         fields = ['start_date', 'end_date', 'preference']
 
-class ParticipantPreferenceSerializer(serializers.ModelSerializer):
-    selected_timeslots = TimeSlotSerializer(many=True)
-
+class TimeSlotPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ParticipantPreference
-        fields = ['selected_timeslots']
+        model = TimeSlotPreference
+        fields = ['start_date', 'end_date', 'preference']
 
-    def create(self, validated_data):
-        selected_timeslots_data = validated_data.pop('selected_timeslots')
-        instance = ParticipantPreference.objects.create(**validated_data)
+    def validate_start_date(self, value):
+        # Add custom validation logic if needed
+        return value
 
-        for time_slot_data in selected_timeslots_data:
-            instance.selected_timeslots.create(**time_slot_data)
+    def validate_end_date(self, value):
+        # Add custom validation logic if needed
+        return value
 
-        return instance
 # UserModel = get_user_model()
 
 # class UserSerializer(serializers.ModelSerializer):
