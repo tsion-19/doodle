@@ -65,9 +65,7 @@ const Manage = ({ news, data }) => {
     <div id="CreateGroup" className="main_grid">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid className="sx_news" item xs={4}>
-            <News news={news} start={0} numberOfDivsNews={3} />
-          </Grid>
+          <Grid className="sx_news" item xs={3}></Grid>
           <Grid style={{ paddingLeft: 0 }} item xs={6}>
             <div className="field">
               <ManageMeeting data={data} />
@@ -83,8 +81,7 @@ const Manage = ({ news, data }) => {
                   marginRight: 20,
                   paddingBottom: 20,
                   textAlign: "end",
-                }}
-              >
+                }}>
                 <PrimaryButton
                   text="Book it"
                   style={{ textAlign: "end" }}
@@ -94,9 +91,9 @@ const Manage = ({ news, data }) => {
               </div>
             </div>
           </Grid>
-          {/* <Grid className="dx_news" item xs={2}> */}
-          {/* <News news={news} start={3} numberOfDivsNews={6} /> */}
-          {/* </Grid> */}
+          <Grid className="dx_news" item xs={3}>
+            {/* <News news={news} start={3} numberOfDivsNews={6} /> */}
+          </Grid>
         </Grid>
       </Box>
     </div>

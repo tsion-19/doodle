@@ -4,6 +4,7 @@ import user from "../images/user.png";
 import "../ManageMeeting/manage.css";
 import EnterNameAndEmail from "./SubmitVote";
 import axios from "axios";
+import PrimaryButton from "../Utils/PrimaryButton";
 
 const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
   const time_slots = [
@@ -209,7 +210,8 @@ const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
               justifyContent: "space-between",
               marginTop: "20px",
             }}>
-            <button onClick={handleCancel}>Decline</button>
+            <PrimaryButton text="Decline" functionOnClick={handleCancel} />
+
             <button onClick={handleSubmit}>Submit</button>
           </div>
         </>

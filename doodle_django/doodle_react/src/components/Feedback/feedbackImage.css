@@ -1,0 +1,17 @@
+.feedback_image {
+  position: fixed;
+  aspect-ratio: 1 / 1;
+  width: 80px;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background-color: #f7f5f4;
+  overflow: hidden;
+  border: 2px solid #59483e;
+  user-select: none;
+  cursor: pointer;
+}
+
+.feedback_image > img {
+  width: -webkit-fill-available;
+}

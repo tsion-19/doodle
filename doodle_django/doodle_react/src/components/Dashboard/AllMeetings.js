@@ -61,16 +61,13 @@ const AllMeetings = ({ data }) => {
           textAlign: "left",
           marginTop: 0,
           padding: 10,
-        }}
-      >
+        }}>
         <div
-          style={{ display: "inline-flex", width: "-webkit-fill-available" }}
-        >
+          style={{ display: "inline-flex", width: "-webkit-fill-available" }}>
           <Grid
             container
             spacing={2}
-            style={{ display: "flex", paddingTop: 0 }}
-          >
+            style={{ display: "flex", paddingTop: 0 }}>
             <Grid item s={3}>
               <h3>Meetings</h3>
             </Grid>
@@ -81,8 +78,7 @@ const AllMeetings = ({ data }) => {
                   value={age}
                   onChange={handleChangeMeeting}
                   displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                >
+                  inputProps={{ "aria-label": "Without label" }}>
                   <MenuItem style={{ color: "#757575" }} value="">
                     <em>All</em>
                   </MenuItem>
@@ -121,8 +117,7 @@ const AllMeetings = ({ data }) => {
       </div>
       <div
         className="cardMeeting"
-        style={{ paddingBottom: 5, marginLeft: 40, marginRight: 40 }}
-      >
+        style={{ paddingBottom: 5, marginLeft: 40, marginRight: 40 }}>
         {data
           .filter(
             (meeting) =>
@@ -131,9 +126,8 @@ const AllMeetings = ({ data }) => {
           )
           .map((meeting) => (
             <Link
-              to={`/manage?id=${meeting.id}`}
-              style={{ textDecoration: "inherit", color: "inherit" }}
-            >
+              to={`/user?id=${meeting.id}`}
+              style={{ textDecoration: "inherit", color: "inherit" }}>
               <div className="card_meeting">
                 <Grid container spacing={2}>
                   <Grid
@@ -142,8 +136,7 @@ const AllMeetings = ({ data }) => {
                     style={{
                       marginTop: "auto",
                       marginBottom: "auto",
-                    }}
-                  >
+                    }}>
                     <div>
                       <img
                         style={{ width: "20px", paddingLeft: 15 }}
@@ -159,8 +152,7 @@ const AllMeetings = ({ data }) => {
                           marginTop: 7,
                           textAlign: "start",
                           marginBottom: 7,
-                        }}
-                      >
+                        }}>
                         {meeting["title"]}
                       </h4>
                       <div className="all_meeting_div_img">
@@ -179,12 +171,10 @@ const AllMeetings = ({ data }) => {
                     style={{
                       marginTop: "auto",
                       marginBottom: "auto",
-                    }}
-                  >
+                    }}>
                     <div
                       className="all_meeting_div_img"
-                      style={{ textAlign: "end" }}
-                    >
+                      style={{ textAlign: "end" }}>
                       <img
                         onClick={(e) => handleImageClick(e, meeting["id"])}
                         src={trash}
