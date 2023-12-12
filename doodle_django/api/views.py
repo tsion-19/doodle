@@ -113,7 +113,7 @@ def api_meetings_edit(request, meeting_id):
         return Response(MeetingSerializer(meeting).data, status=status.HTTP_200_OK)
     elif request.method == 'PUT' or request.method == 'POST':
         meeting = get_object_or_404(Meeting, pk=meeting_id)
-        serializer = MeetingSerializer(meeting, data=request.data)
+        serializer = MeetingSerializer(meeting, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
