@@ -4,11 +4,27 @@ from django.utils.timezone import *
 from django.core.validators import *
 from django.contrib.auth import get_user_model,authenticate
 
-from . models import *
+class TimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['start_date', 'end_date', 'preference']
 
-# class ParticipantPreferenceSerializer(serializers.ModelSerializer):
-#     selected_timeslots = TimeSlotSerializer(many=True)
+class TimeSlotPreferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlotPreference
+        fields = ['start_date', 'end_date', 'preference']
 
+    def validate_start_date(self, value):
+        # Add custom validation logic if needed
+        return value
+
+    def validate_end_date(self, value):
+        # Add custom validation logic if needed
+        return value
+
+# UserModel = get_user_model()
+
+# class UserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = ParticipantPreference
 #         fields = ['selected_timeslots']

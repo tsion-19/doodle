@@ -228,6 +228,30 @@ def api_feedbacks(request):
 #             return Response(serializer.data, status=201)
 #         return Response(serializer.errors, status=400)
 
+@api_view(['POST'])
+def api_save_preferences(request):
+    if request.method == 'POST':
+        data = request.data.get('selected_timeslots', [])
+
+        try:
+            for preference_data in data:
+                # Skip processing if the object is empty
+                if not preference_data:
+                    continue
+
+                serializer = TimeSlotPreferenceSerializer(data=preference_data)
+                
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response({'error': serializer.errors}, status=400)
+
+            return Response({'message': 'Preferences saved successfully'}, status=201)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+    return Response({'error': 'Invalid request method'}, status=400)
 
 # class UserRegister(APIView):
 # 	permission_classes = (permissions.AllowAny,)
