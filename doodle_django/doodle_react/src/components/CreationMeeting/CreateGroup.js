@@ -59,10 +59,10 @@ const CreateGroup = ({
             id="outlined-multiline-flexible"
             label="Description"
             multiline
+            maxRows={4}
             style={{
               backgroundColor: "white",
             }}
-            maxRows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             InputLabelProps={{

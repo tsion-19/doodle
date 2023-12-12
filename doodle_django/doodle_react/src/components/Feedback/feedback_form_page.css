@@ -1,0 +1,10 @@
+#feedback_form_page {
+  position: fixed;
+  aspect-ratio: 1 / 1;
+  width: 20%;
+  min-width: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
+  bottom: 40px;
+  right: 100px;
+}

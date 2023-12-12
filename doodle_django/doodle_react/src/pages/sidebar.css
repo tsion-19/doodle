@@ -4,6 +4,16 @@
   margin-top: 120px;
 }
 
+.header__shrink {
+  background-color: #ae9f97;
+  border-bottom: 1px solid #827066;
+  opacity: 0.92;
+}
+
+.header {
+  border-bottom: 1px solid #827066;
+}
+
 .sidebar {
   background-color: #8e9672b6;
   color: #030303;
@@ -45,9 +55,6 @@
 
 .sidebar .link_text {
   margin-left: 10px;
-  display: $ {
-    isopen?"block": "none";
-  }
 }
 
 .sidebar-container container {
