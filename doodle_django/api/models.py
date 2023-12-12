@@ -155,6 +155,7 @@ class Vote(models.Model):
     class Meta:
         unique_together = ('time_slot', 'user', 'user_nickname')
 
+
 class Feedback(models.Model):
     id = models.BigAutoField(
         primary_key=True,
@@ -202,32 +203,3 @@ class FeedbackAttachment(models.Model):
         db_column="file"
     )
     
-    
-# class CustomTimeSlot(models.Model):
-#     '''
-#     REMOVED SOON, USE VOTE INSTEAD
-#     '''
-#     start_date = models.DateTimeField()
-#     end_date = models.DateTimeField()
-#     preference = models.CharField(max_length=10, default='yes')
-#     participant_preference = models.ForeignKey('ParticipantPreference', related_name='time_slots', on_delete=models.CASCADE)
-
-# class ParticipantPreference(models.Model):
-#     '''
-#     REMOVED SOON, USE VOTE INSTEAD
-#     '''
-#     YES = 'yes'
-#     MAYBE = 'maybe'
-#     NO = 'no'
-
-#     PREFERENCE_CHOICES = [
-#         (YES, 'Yes'),
-#         (MAYBE, 'Maybe'),
-#         (NO, 'No'),
-#     ]
-
-    # selected_timeslots = models.ManyToManyField(TimeSlot)
-    # preference = models.CharField(
-    #     max_length=10, choices=PREFERENCE_CHOICES, default=YES
-
-    # )

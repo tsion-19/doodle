@@ -79,6 +79,10 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(blank=True, db_column='user_id', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.AlterUniqueTogether(
+            name='vote',
+            unique_together={('time_slot', 'user', 'user_nickname')},
+        ),
         migrations.CreateModel(
             name='SchedulePollLink',
             fields=[

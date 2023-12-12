@@ -4,39 +4,8 @@ from django.utils.timezone import *
 from django.core.validators import *
 from django.contrib.auth import get_user_model,authenticate
 
-class TimeSlotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeSlot
-        fields = ['start_date', 'end_date', 'preference']
+from . models import *
 
-class TimeSlotPreferenceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeSlotPreference
-        fields = ['start_date', 'end_date', 'preference']
-
-    def validate_start_date(self, value):
-        # Add custom validation logic if needed
-        return value
-
-    def validate_end_date(self, value):
-        # Add custom validation logic if needed
-        return value
-
-# UserModel = get_user_model()
-
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ParticipantPreference
-#         fields = ['selected_timeslots']
-
-#     def create(self, validated_data):
-#         selected_timeslots_data = validated_data.pop('selected_timeslots')
-#         instance = ParticipantPreference.objects.create(**validated_data)
-
-#         for time_slot_data in selected_timeslots_data:
-#             instance.selected_timeslots.create(**time_slot_data)
-
-#         return instance
 
 class SchedulePollLinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -104,12 +73,13 @@ class PreferenceSerializer(serializers.ModelSerializer):
         model = Preference
         fields = '__all__'
 
-class VoteSerializerTest(serializers.ModelSerializer):
+class VoteSerializerOut(serializers.ModelSerializer):
     time_slot = TimeSlotSerializer(read_only=True, context={"ignore_poll":True})
-    preference = PreferenceSerializer(read_only=True)
+    preference = serializers.CharField(read_only=True)
     class Meta:
         model = Vote
         exclude = ('user',)
+        
 class VoteSerializer(serializers.ModelSerializer):
     
     preference = serializers.ChoiceField(   
