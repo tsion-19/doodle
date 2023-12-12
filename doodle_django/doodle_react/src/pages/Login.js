@@ -69,7 +69,13 @@ const Login = () => {
       <h2> Login for Doodle Unical</h2>
 
       <Card
-        sx={{ maxWidth: 550, marginTop: 5, background: "#d1c3bb" }}
+        sx={{
+          maxWidth: 400,
+          marginTop: 1,
+          background: "#d1c3bb",
+          maxHeight: 300,
+          marginLeft: 2,
+        }}
         elevation={0}
         display="flex"
       >
@@ -78,7 +84,6 @@ const Login = () => {
           label="Username"
           placeholder="Enter username"
           variant="outlined"
-          fullWidth
           required
           name="username"
           value={data.username}

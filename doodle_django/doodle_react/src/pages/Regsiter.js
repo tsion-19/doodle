@@ -50,7 +50,17 @@ const Register = () => {
   return (
     <div className="login">
       <h2>Register to book appointment</h2>
-      <Card sx={{ maxWidth: 450, marginTop: 5 }} elevation={0} display="flex">
+      <Card
+        sx={{
+          maxWidth: 400,
+          marginTop: 2,
+          background: "#d1c3bb",
+          marginLeft: 5,
+          maxHeight: 490,
+        }}
+        elevation={0}
+        display="flex"
+      >
         <Box sx={{ m: "1rem" }} />
 
         <TextField
@@ -107,7 +117,8 @@ const Register = () => {
             size="large"
             fullWidth
             style={btnstyle}
-            onClick={handleSubmitRegister}>
+            onClick={handleSubmitRegister}
+          >
             Register
           </Button>
           <Box sx={{ m: "1rem" }} />

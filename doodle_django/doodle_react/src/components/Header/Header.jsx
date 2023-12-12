@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import "./header.css";
-import { Container } from "react-bootstrap";
 import { NavLink, Link } from "react-router-dom";
 import Unical from "../images/logo.png";
 
@@ -15,11 +14,11 @@ const NAV__LINKS = [
   },
   {
     display: "Create",
-    url: "/create",
+    url: "/login",
   },
   {
     display: "Contact",
-    url: "/contact",
+    url: "/logout",
   },
 ];
 
@@ -52,13 +51,14 @@ const Header = () => {
 
   return (
     <header className="header" ref={headerRef}>
-      <Container>
+      <div>
         <div className="navigation">
           <Link to="/" style={{ textDecoration: "none" }}>
             <div className="logo">
               <h2
                 className=" d-flex gap-2 align-items-center "
-                style={{ color: "inherit", textDecoration: "inherit" }}>
+                style={{ color: "inherit", textDecoration: "inherit" }}
+              >
                 <img className="image" src={Unical} alt="unical" />
                 Doodle Meet
               </h2>
@@ -73,7 +73,8 @@ const Header = () => {
                     to={item.url}
                     className={(navClass) =>
                       navClass.isActive ? "active" : ""
-                    }>
+                    }
+                  >
                     {item.display}
                   </NavLink>
                 </li>
@@ -87,7 +88,7 @@ const Header = () => {
             </span>
           </div>
         </div>
-      </Container>
+      </div>
     </header>
   );
 };
