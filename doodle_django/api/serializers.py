@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from django.utils.timezone import *
 
+from django.utils.timezone import *
 from django.core.validators import *
+from django.contrib.auth import get_user_model,authenticate
 
 from . models import *
-from django.contrib.auth import get_user_model,authenticate
 
 # class ParticipantPreferenceSerializer(serializers.ModelSerializer):
 #     selected_timeslots = TimeSlotSerializer(many=True)
@@ -22,21 +22,25 @@ from django.contrib.auth import get_user_model,authenticate
 
 #         return instance
 
-class SchedulePoolLinkSerializer(serializers.ModelSerializer):
+class SchedulePollLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SchedulePoolLink
+        model = SchedulePollLink
         fields = ('token',)
 
         
-class SchedulePoolSerializer(serializers.ModelSerializer):
+class SchedulePollSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SchedulePool
+        model = SchedulePoll
         fields = '__all__'
 
 class TimeSlotSerializer(serializers.ModelSerializer):
 
-    schedule_pool = SchedulePoolSerializer(required=False, read_only=True)
-
+    schedule_poll = SchedulePollSerializer(required=False)
+    
+    def __init__(self, *args, **kwargs):
+        super(TimeSlotSerializer, self).__init__(*args, **kwargs)
+        self.fields["schedule_poll"].read_only = True if self.context.get("ignore_poll") else False
+    
     def validate(self, data):
         if 'end_date' in data and 'start_date' in data:
             if data['end_date'] < data['start_date']:
@@ -56,7 +60,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     timeslots = TimeSlotSerializer(many=True, required=False)
-    link = SchedulePoolLinkSerializer(required=False)
+    link = SchedulePollLinkSerializer(required=False)
 
     def to_representation(self, obj):
         ret = super(MeetingSerializer, self).to_representation(obj)
@@ -84,8 +88,36 @@ class PreferenceSerializer(serializers.ModelSerializer):
         model = Preference
         fields = '__all__'
 
+class VoteSerializerTest(serializers.ModelSerializer):
+    time_slot = TimeSlotSerializer(read_only=True, context={"ignore_poll":True})
+    preference = PreferenceSerializer(read_only=True)
+    class Meta:
+        model = Vote
+        exclude = ('user',)
 class VoteSerializer(serializers.ModelSerializer):
-    preference = PreferenceSerializer()
+    
+    preference = serializers.ChoiceField(   
+        choices=(1,2,3)
+    )
+
+    time_slot = TimeSlotSerializer(context={"ignore_poll":True})
+
+    user = serializers.ReadOnlyField()
+
+    def create(self, validated_data):
+        ts = validated_data.get("time_slot")
+        ts_serializer = TimeSlotSerializer(data=ts, context={"ignore_poll":True})
+        if ts_serializer.is_valid():
+            ts["schedule_poll_id"] = self.context.get("poll").pk
+            ts = TimeSlot.objects.update_or_create(**ts)
+        vote = Vote.objects.create(
+            preference=PreferenceSerializer(Preference.objects.get(pk=validated_data.get("preference"))).data,
+            time_slot=ts[0],
+            user=self.context.get("user"),
+            user_nickname=validated_data.get("user_nickname")
+        )
+        return vote
+
     class Meta:
         model = Vote
         fields = '__all__'

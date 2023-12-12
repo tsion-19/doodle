@@ -10,10 +10,11 @@ class TimeSlot(models.Model):
         primary_key=True,
         db_column="id",
     )
-    schedule_pool = models.ForeignKey(
-        "SchedulePool",
+    schedule_poll = models.ForeignKey(
+        "SchedulePoll",
         on_delete=models.CASCADE,
         blank=True,
+        db_column="schdule_poll_id"
     )
     start_date = models.DateTimeField(
         db_column="start_date",
@@ -23,7 +24,7 @@ class TimeSlot(models.Model):
     )
 
     class Meta:
-        unique_together = ('schedule_pool', 'start_date', 'end_date')
+        unique_together = ('schedule_poll', 'start_date', 'end_date')
     
 
 class Preference(models.Model):
@@ -34,7 +35,6 @@ class Preference(models.Model):
     description = models.CharField(
         db_column="description",
         max_length=500,
-        choices=(("YES", "YES"), ("MAYBE", "MAYBE"), ("NO","NO")),
     )    
 
 class Meeting(models.Model):
@@ -96,7 +96,7 @@ class Meeting(models.Model):
         null=True
     )
 
-class SchedulePool(models.Model):
+class SchedulePoll(models.Model):
     id = models.BigAutoField(
         primary_key=True,
         db_column="id"
@@ -106,16 +106,18 @@ class SchedulePool(models.Model):
     meeting = models.ForeignKey(
         to=Meeting,
         on_delete=models.CASCADE,
+        db_column="meeting_id"
     )
 
-class SchedulePoolLink(models.Model):
+class SchedulePollLink(models.Model):
     id = models.BigAutoField(
         primary_key=True,
         db_column="id"
     )
-    schedule_pool = models.ForeignKey(
-        SchedulePool,
+    schedule_poll = models.ForeignKey(
+        SchedulePoll,
         on_delete=models.CASCADE,
+        db_column="schedule_poll_id",
         blank=True,
     )
     token = models.UUIDField(
@@ -150,6 +152,8 @@ class Vote(models.Model):
         blank=True,
         null=True
     )
+    class Meta:
+        unique_together = ('time_slot', 'user', 'user_nickname')
 
 class Feedback(models.Model):
     id = models.BigAutoField(
