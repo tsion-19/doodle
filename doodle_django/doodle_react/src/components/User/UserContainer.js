@@ -8,19 +8,32 @@ import "../ManageMeeting/manage.css";
 import UserPreference from "../User/UserPreference";
 import News from "../CreationMeeting/News";
 import TableMeetingUser from "../User/TableMeetingUser";
-import Preference from "../../pages/Preference";
+import VotedPage from './VotedPage';
+import Button from "@mui/material/Button";
+import { grey } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 const User = ({ news, data }) => {
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(grey[600]),
+    backgroundColor: grey[600],
+    "&:hover": {
+      backgroundColor: grey[700],
+    },
+  }));
+
+  const getToken = () => sessionStorage.getItem("token");
+const [submitsucess,setSubmitSucess]=useState(false)
   const [selectedColumn, setSelectedColumn] = useState([]);
+  const [checkboxValues, setCheckboxValues] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([]);
 
   useEffect(() => {
-    // console.log("qua");
     if (data["final_date"] !== null && data["timeslots"]) {
       for (let i = 0; i < data["timeslots"].length; ++i) {
-        // console.log("index ", i, data["final_date"]);
         if (data["final_date"] === data["timeslots"][i]["id"]) {
           setSelectedColumn(i + 1);
-          // console.log(selectedColumn);
           return;
         }
       }
@@ -37,6 +50,10 @@ const User = ({ news, data }) => {
     }
   };
 
+  const handleSubmit = async (value) => {
+    setSubmitSucess(value)
+  };
+
   return (
     <div className="CreateGroup">
       <Box sx={{ flexGrow: 1 }}>
@@ -46,28 +63,32 @@ const User = ({ news, data }) => {
           </Grid>
           <Grid style={{ marginTop: 32, paddingLeft: 0 }} item xs={8}>
             <div className="field">
-              {/* Box to hold UserPreference and TableMeetingUser side by side */}
               <Box sx={{ display: "flex" }}>
-                {/* UserPreference Component */}
-                <UserPreference data={data} />
-
-                {/* Vertical Divider */}
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  style={{ margin: "0 16px" }}
-                />
-
-                {/* TableMeetingUser Component */}
-                <TableMeetingUser
+                {!submitsucess && <UserPreference data={data} />}
+                <Divider orientation="vertical" flexItem style={{ margin: "0 16px" }} />
+                {/* Pass the callback function and states to TableMeetingUser */}
+                {!submitsucess && <TableMeetingUser
+                  onSubmit={handleSubmit}
                   data={data}
                   selectedColumn={selectedColumn}
                   columnSelection={columnSelection}
-                />
+                  checkboxValues={checkboxValues}
+                  setCheckboxValues={setCheckboxValues}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                />}
+                {submitsucess && <VotedPage/>}
               </Box>
-            </div>
-            <div style={{ paddingTop: 5 }}>
-              <Preference />
+              <div style={{ textAlign: "end" }}>
+                {/* Use the handleSubmit function from props */}
+                {/* <ColorButton
+                  style={{ margin: 20, textAlign: "end" }}
+                  onClick={handleSubmit}
+                  variant="contained"
+                >
+                </ColorButton> */}
+                
+              </div>
             </div>
           </Grid>
           <Grid className="dx_news" item xs={2}>

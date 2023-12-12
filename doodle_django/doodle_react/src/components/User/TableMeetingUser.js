@@ -6,21 +6,23 @@ import EnterNameAndEmail from "./SubmitVote";
 import axios from "axios";
 import PrimaryButton from "../Utils/PrimaryButton";
 
-const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
-  const time_slots = [
-    {},
-    ...(Array.isArray(data["timeslots"]) ? data["timeslots"] : []),
-  ];
+const TableMeetingUser = ({
+  selectedColumn,
+  columnSelection,
+  data,
+  onSubmit,
+}) => {
+  // // Initialize time_slots array
+  // const time_slots = [
+  //   // ... altri valori esistenti in data["timeslots"]
+  //   {},
+  //   ...(Array.isArray(data["timeslots"]) ? data["timeslots"] : []),
+  // ];
+  // Initialize time_slots array
+  const time_slots = Array.isArray(data["timeslots"]) ? data["timeslots"] : [];
 
-  const [checkboxValues, setCheckboxValues] = useState(
-    Array.from({ length: time_slots.length }, () => false)
-  );
-
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-
-  const [currentStep, setCurrentStep] = useState("selectTimeSlot");
+  console.log("Data:", data);
+  console.log("Time Slots:", data["timeslots"]);
   const handleCheckboxToggle = (index) => {
     setCheckboxValues((prevValues) => {
       const newValues = [...prevValues];
@@ -30,66 +32,47 @@ const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
       newValues[index] =
         currentValue === false ? true : currentValue === true ? "maybe" : false;
 
-      console.log("New Checkbox Values:", newValues);
-
       return newValues;
     });
 
     // Construct the selectedDates array based on checkbox values
-    const newSelectedDates = time_slots.reduce((acc, time_slot, i) => {
-      if (checkboxValues[i] === true || checkboxValues[i] === "maybe") {
-        acc.push({
-          start_date: time_slot.start_date,
-          end_date: time_slot.end_date,
-          preference: checkboxValues[i] === true ? "yes" : "maybe",
-        });
-      }
-      return acc;
-    }, []);
+    const newSelectedDates = time_slots.map((time_slot, i) => ({
+      start_date: time_slot.start_date,
+      end_date: time_slot.end_date,
+      preference:
+        checkboxValues[i] === true
+          ? "yes"
+          : checkboxValues[i] === "maybe"
+          ? "maybe"
+          : "no",
+    }));
 
     setSelectedDates(newSelectedDates);
-
-    console.log("New Selected Dates:", newSelectedDates);
   };
-
-  const handleContinue = () => {
-    // Check if there is at least one "Yes" or "Maybe" selected
-    const hasYesOrMaybe = checkboxValues.some(
-      (value) => value === true || value === "maybe"
-    );
-
-    if (hasYesOrMaybe) {
-      setCurrentStep("enterNameAndEmail");
-    } else {
-      alert(
-        "Please select at least one 'Yes' or 'Maybe' time slot before continuing."
-      );
-    }
-  };
-
-  const handleCancel = () => {
-    setCheckboxValues(Array.from({ length: time_slots.length }, () => false));
-    setSelectedDates([]);
-    setCurrentStep("selectTimeSlot");
-  };
+  const [checkboxValues, setCheckboxValues] = useState(
+    Array.from({ length: time_slots.length }, () => false)
+  );
+  const [selectedDates, setSelectedDates] = useState(time_slots);
 
   const handleSubmit = async () => {
     const preferences = {
-      selected_timeslots: selectedDates.map((date, index) => ({
-        start_date: date.start_date,
-        end_date: date.end_date,
+      selected_timeslots: selectedDates.map((time_slot, index) => ({
+        start_date: time_slot.start_date,
+        end_date: time_slot.end_date,
         preference:
           checkboxValues[index] === true
             ? "yes"
-            : checkboxValues[index] || "no",
+            : checkboxValues[index] === "maybe"
+            ? "maybe"
+            : "no",
       })),
     };
 
-    console.log("Submitting Preferences:", preferences); // Log the preferences being submitted
+    console.log("Submitting Preferences:", preferences);
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/participant-preference/",
+        "http://localhost:8000/api/save-preferences/",
         {
           method: "POST",
           headers: {
@@ -101,121 +84,128 @@ const TableMeetingUser = ({ selectedColumn, columnSelection, data }) => {
 
       if (response.ok) {
         console.log("Preferences submitted successfully!");
+        setCheckboxValues(
+          Array.from({ length: time_slots.length }, () => false)
+        );
+        setSelectedDates(time_slots);
+        onSubmit(true);
       } else {
-        console.error("Failed to submit preferences:", response.statusText);
-        console.log("Response Status:", response.status);
-        console.log("Response Body:", await response.json());
-        console.log("Submitted Preferences:", preferences);
+        const errorData = await response.json();
+        console.error("Failed to submit preferences:", errorData);
       }
     } catch (error) {
-      console.error("An unexpected error occurred:", error.message);
+      console.error("Error submitting preferences:", error);
     }
-
-    // Reset state after submission
-    setCheckboxValues(Array.from({ length: time_slots.length }, () => false));
-    setSelectedDates([]);
-    setUserName("");
-    setUserEmail("");
-    setCurrentStep("selectTimeSlot");
   };
 
   return (
     <div>
-      {currentStep === "selectTimeSlot" && (
-        <>
-          <h1>Select your preferred times</h1>
-          <p>We’ll let you know when the organizer picks the best time</p>
+      <table
+        id="table_meeting"
+        style={{
+          border: "3px solid #f5f5f5",
+          borderRadius: "8px",
+          width: "-webkit-fill-available",
+          marginRight: "15px",
+          marginLeft: "15px",
+        }}>
+        <thead>
+          <tr>
+            {time_slots.map((value, index) => {
+              const startDate = new Date(value["start_date"]);
+              const endDate = new Date(value["end_date"]);
 
-          <table
-            id="table_meeting"
-            style={{
-              border: "3px solid #f5f5f5",
-              borderRadius: "8px",
-              width: "-webkit-fill-available",
-              marginRight: "15px",
-              marginLeft: "15px",
-            }}>
-            <thead>
-              <tr>
-                {time_slots &&
-                  time_slots.map((value, index) => (
-                    <th
-                      key={index}
-                      style={{ position: "relative", minWidth: "100px" }}
-                      onClick={() => columnSelection(index)}
-                      className={
-                        selectedColumn === index ? "selected_column" : ""
-                      }>
-                      {index === 0 ? (
-                        <label
-                          style={{
-                            position: "absolute",
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                          }}></label>
-                      ) : (
-                        <label>
-                          <br />
-                          <p>
-                            {time_slots[index]?.start_date
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("/")}
-                          </p>
-                          <p>{time_slots[index]?.start_date.split("T")[1]}</p>
-                          <p>{time_slots[index]?.end_date.split("T")[1]}</p>
-                          <div className="div_user">
-                            <img src={user} alt="user" />
-                            <nobr> 2</nobr>
-                          </div>
+              const startOptions = {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              };
 
-                          <br />
-                          <Checkbox
-                            onChange={() => handleCheckboxToggle(index)}
-                            checked={checkboxValues[index] === true}
-                            indeterminate={checkboxValues[index] === "maybe"}
-                            style={{
-                              backgroundColor:
-                                checkboxValues[index] === true
-                                  ? "green"
-                                  : checkboxValues[index] === "maybe"
-                                  ? "yellow"
-                                  : "transparent",
-                              padding: "1px", // Adjust padding as needed
-                              borderRadius: "1px", // Add border radius for rounded corners  // Add other styles as needed
-                            }}
-                          />
-                          <br />
-                          <Checkbox disabled checked />
-                        </label>
-                      )}
-                    </th>
-                  ))}
-              </tr>
-              <div style={{ marginTop: "-80px", marginLeft: "20px" }}>
-                <span>You</span>
-                <br />
-                <br />
-                <span>Degefom</span>
-              </div>
-            </thead>
-            <tbody></tbody>
-          </table>
+              const endOptions = {
+                hour: "numeric",
+                minute: "numeric",
+              };
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "20px",
-            }}>
-            <PrimaryButton text="Decline" functionOnClick={handleCancel} />
+              const start = startDate.toLocaleDateString("en-US", startOptions);
+              const end = endDate.toLocaleTimeString("en-US", endOptions);
 
-            <button onClick={handleSubmit}>Submit</button>
-          </div>
-        </>
-      )}
+              const formattedStartDate = new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              }).format(new Date(value.start_date));
+
+              const formattedEndDate = new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              }).format(new Date(value.end_date));
+
+              <p>
+                {formattedStartDate} - {formattedEndDate}
+              </p>;
+
+              return (
+                <th
+                  key={index}
+                  style={{ position: "relative", minWidth: "100px" }}
+                  onClick={() => columnSelection(index)}
+                  className={selectedColumn === index ? "selected_column" : ""}>
+                  <label key={index}>
+                    <br />
+                    {/* <p>{start} - {end}</p> */}
+                    <p>
+                      {formattedStartDate} - {formattedEndDate}
+                    </p>
+                    <div className="div_user">
+                      <img src={user} alt="user" />
+                      <nobr> 2</nobr>
+                    </div>
+                    <br />
+                    <Checkbox
+                      onChange={() => handleCheckboxToggle(index)}
+                      checked={checkboxValues[index] === true}
+                      indeterminate={checkboxValues[index] === "maybe"}
+                      style={{
+                        backgroundColor:
+                          checkboxValues[index] === true
+                            ? "green"
+                            : checkboxValues[index] === "maybe"
+                            ? "yellow"
+                            : "transparent",
+                        padding: "1px",
+                        borderRadius: "1px",
+                      }}
+                    />
+                    <br />
+                    <Checkbox disabled checked />
+                    <br />
+                    <span>You</span>
+                  </label>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+      </table>
+
+      {/* Buttons for testing */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}>
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
     </div>
   );
 };

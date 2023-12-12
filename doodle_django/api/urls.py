@@ -14,7 +14,7 @@ urlpatterns = [
     path("meetings/<str:meeting_id>/", api_meetings_edit, name="api_meetings_edit"),
     path("meetings/<str:meeting_id>/delete/", api_meetings_delete, name="api_meetings_delete"),
     path("feedback/new/", api_feedback_create, name="api_feedback_create"),
-    path('participant-preference/', api_participant_preference_create, name='api_participant_preference_create'),
+    path('save-preferences/', api_save_preferences, name='api-save-preferences'),
 
     
 ]
