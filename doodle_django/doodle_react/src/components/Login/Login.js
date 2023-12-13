@@ -45,7 +45,7 @@ const Login = () => {
       const getToken = await sessionStorage.getItem("token");
       console.log("hava token");
       console.log(getToken);
-      if (getToken == "4a77f60688d0c0d4f804ab03735782067f166d01") {
+      if (getToken == "") {
         console.log("IM booking");
         navigate("/create");
       } else {
@@ -55,6 +55,12 @@ const Login = () => {
       alert(error.response.data.password1[1]);
       console.log(error);
     }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isLoggedIn");
+    navigate("/");
   };
 
   const handleInputChange = (e) => {
@@ -84,6 +90,7 @@ const Login = () => {
           label="Username"
           placeholder="Enter username"
           variant="outlined"
+          fullWidth
           required
           name="username"
           value={data.username}

@@ -17,13 +17,12 @@ import Creation from "../../pages/Creation";
 import Manage from "../../pages/Manage";
 import Dashboard from "../../pages/Dashboard";
 import Preference from "../../pages/Preference";
-import Register from "../../pages/Regsiter";
-import Login from "../../pages/Login";
+import Register from "../Login/Regsiter";
+import Login from "../Login/Login";
 import Feedback from "../../pages/Feedback";
 import User from "../../pages/User";
 
-function
-  Routers() {
+function Routers() {
   const location = useLocation();
   const token = sessionStorage.getItem("token");
   console.log(token);

@@ -113,7 +113,7 @@ const Register = () => {
           <Button
             type="submit"
             color="grey"
-            variant="contained"
+            variant="outlined"
             size="large"
             fullWidth
             style={btnstyle}

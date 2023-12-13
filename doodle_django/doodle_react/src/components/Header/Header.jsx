@@ -5,27 +5,16 @@ import Unical from "../images/logo.png";
 
 const NAV__LINKS = [
   {
-    display: "Home",
-    url: "/",
-  },
-  {
-    display: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    display: "Create",
+    display: "login",
     url: "/login",
   },
   {
-    display: "Contact",
-    url: "/logout",
+    display: "logout",
+    url: "/",
   },
 ];
 
 const Header = () => {
-  const navigationbuttonhadler = () => {
-    console.log("Market Clicked");
-  };
   const headerRef = useRef(null);
 
   const menuRef = useRef(null);

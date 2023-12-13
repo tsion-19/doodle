@@ -4,22 +4,14 @@
   margin-top: 120px;
 }
 
-.header__shrink {
-  background-color: #ae9f97;
-  border-bottom: 1px solid #827066;
-  opacity: 0.92;
-}
 
-.header {
-  border-bottom: 1px solid #827066;
-}
 
 .sidebar {
-  background-color: #8e9672b6;
+  background-color: #ae9f97;
   color: #030303;
   overflow: hidden;
   transition: width 0.5s ease-in-out;
-  z-index: 111112;
+  z-index: 111110;
 }
 
 .sidebar .top_section {
