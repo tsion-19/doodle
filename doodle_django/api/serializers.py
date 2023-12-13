@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.utils.timezone import *
 from django.core.validators import *
-from django.contrib.auth import get_user_model,authenticate
+from django.contrib.auth import get_user_model, authenticate
 
 from . models import *
 
@@ -124,3 +124,9 @@ class FeedbackAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackAttachment
         fields = '__all__'
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email')

@@ -21,3 +21,5 @@ urlpatterns += path("feedbacks/new/", api_feedback_create, name="api_feedback_cr
 urlpatterns += path("feedbacks/<str:feedback_id>/", api_feedback_detail, name="api_feedback_detail"),
 urlpatterns += path("feedbacks/", api_feedbacks, name="api_feedbacks"),
 #urlpatterns += path('participant-preference/', api_participant_preference_create, name='api_participant_preference_create'),
+#User
+urlpatterns += path("user-info/", api_user_info, name="api_user_info"),

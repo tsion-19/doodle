@@ -36,23 +36,15 @@ const Login = () => {
           headers: headers,
         }
       );
-
-      console.log(response);
-      const loggedInUser = response.data.user;
       sessionStorage.setItem("token", response.data.key);
-      sessionStorage.setItem("isLoggedIn", true);
-      // you can change the route path
-      const getToken = await sessionStorage.getItem("token");
-      console.log("hava token");
-      console.log(getToken);
-      if (getToken == "4a77f60688d0c0d4f804ab03735782067f166d01") {
-        console.log("IM booking");
-        navigate("/create");
-      } else {
-        navigate("/", { state: { loggedInUser } });
-      }
+      axios.defaults.headers.common["Authorization"] = "Token " + sessionStorage.getItem("token");
+      const user_res = await axios.post(`http://127.0.0.1:8000/api/user-info/`);
+      console.log(user_res);
+      sessionStorage.setItem("user", JSON.stringify(user_res.data));
+      navigate("/");
+      
     } catch (error) {
-      alert(error.response.data.password1[1]);
+      alert(error);
       console.log(error);
     }
   };

@@ -21,37 +21,57 @@ import Register from "../../pages/Regsiter";
 import Login from "../../pages/Login";
 import Feedback from "../../pages/Feedback";
 import User from "../../pages/User";
+import ProtectedRoute from "./ProtectedRoute";
+import Logout from "../../pages/Logout";
 
 function
   Routers() {
-  const location = useLocation();
-  const token = sessionStorage.getItem("token");
-  console.log(token);
-  if (
-    !token &&
-    location.pathname !== "/" &&
-    location.pathname !== "/login" &&
-    !location.pathname.includes("/register")
-  ) {
-    return <Navigate to="/login" replace />;
-  }
+  const user = sessionStorage.getItem("user");
+  // if (
+  //   !token &&
+  //   location.pathname !== "/" &&
+  //   location.pathname !== "/login" &&
+  //   !location.pathname.includes("/register")
+  // ) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return (
     <div>
       {/* <Navbar /> */}
       <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/logout" element={<Login />} />
-      </Routes>
-      <Routes>
+        <Route path="/" name="Home" element={<Welcome />} />
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute redirectPath="/" isAllowed={!user}>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute redirectPath="/" isAllowed={!user}>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/logout"
+          element={
+            <ProtectedRoute redirectPath="/" isAllowed={!!user}>
+              <Logout />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/create" element={<Creation />} />
         <Route path="/manage" element={<Manage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/preference" element={<Preference />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/user" element={<User />} />
+        <Route path="*" element={<p>There's nothing here: 404!</p>} />
       </Routes>
     </div>
   );

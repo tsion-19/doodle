@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models import Q
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from . serializers import *
 from . exceptions import *
@@ -191,4 +192,13 @@ def api_feedbacks(request):
     feedback = Feedback.objects.all()
     if feedback is not None:
         return Response(status=status.HTTP_200_OK, data=FeedbackSerializer(feedback, many=True).data)
+
+#User
+@api_view(['POST'])
+@login_required
+def api_user_info(request):
+    user_id = Token.objects.get(key=request.auth.key).user_id
+    user = get_user_model().objects.get(id=user_id)
+    return Response(CurrentUserSerializer(user).data, status=status.HTTP_200_OK)
+    
     

@@ -23,6 +23,20 @@ const NAV__LINKS = [
   },
 ];
 
+const user = JSON.parse(sessionStorage.getItem("user"));
+
+const getUserInfo = () => {
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  if(!!user) {
+    return <div>
+              {user.username}
+              {user.email}
+            </div>;
+  }
+  else
+    return <div></div>;
+}
+
 const Header = () => {
   const navigationbuttonhadler = () => {
     console.log("Market Clicked");
@@ -80,10 +94,9 @@ const Header = () => {
               ))}
             </ul>
           </div>
-
           <div className="nav__right d-flex align-items-center gap-5 ">
             <span className="mobile__menu">
-              <i class="ri-menu-line" onClick={toggleMenu}></i>
+              <i className="ri-menu-line" onClick={toggleMenu}></i>
             </span>
           </div>
         </div>
