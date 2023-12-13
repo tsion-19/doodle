@@ -3,6 +3,9 @@ import "./welcome.css";
 import Team from "../components/Welcome/Team";
 import Faq from "../components/Welcome/Faq";
 import Features from "../components/Welcome/Features";
+import FeedbackImage from "../components/Feedback/FeedbackImage";
+import FeedbackFormPage from "../components/Feedback/FeedbackFormPage";
+import FeedbackComponent from "../components/Feedback/FeedbackComponent";
 
 function Welcome() {
   return (
@@ -66,6 +69,7 @@ function Welcome() {
       <br />
       <Faq />
       <br />
+      <FeedbackComponent />
     </div>
   );
 }

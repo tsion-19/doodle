@@ -1,32 +1,20 @@
 import React, { useRef, useEffect } from "react";
 import "./header.css";
-import { Container } from "react-bootstrap";
 import { NavLink, Link } from "react-router-dom";
 import Unical from "../images/logo.png";
 
 const NAV__LINKS = [
   {
-    display: "Home",
+    display: "login",
+    url: "/login",
+  },
+  {
+    display: "logout",
     url: "/",
-  },
-  {
-    display: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    display: "Create",
-    url: "/create",
-  },
-  {
-    display: "Contact",
-    url: "/contact",
   },
 ];
 
 const Header = () => {
-  const navigationbuttonhadler = () => {
-    console.log("Market Clicked");
-  };
   const headerRef = useRef(null);
 
   const menuRef = useRef(null);
@@ -52,14 +40,19 @@ const Header = () => {
 
   return (
     <header className="header" ref={headerRef}>
-      <Container>
+      <div>
         <div className="navigation">
-          <div className="logo">
-            <h2 className=" d-flex gap-2 align-items-center ">
-              <img className="image" src={Unical} alt="image" />
-              Doodle Meet
-            </h2>
-          </div>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <div className="logo">
+              <h2
+                className=" d-flex gap-2 align-items-center "
+                style={{ color: "inherit", textDecoration: "inherit" }}
+              >
+                <img className="image" src={Unical} alt="unical" />
+                Doodle Meet
+              </h2>
+            </div>
+          </Link>
 
           <div className="nav__menu" ref={menuRef} onClick={toggleMenu}>
             <ul className="nav__list">
@@ -84,7 +77,7 @@ const Header = () => {
             </span>
           </div>
         </div>
-      </Container>
+      </div>
     </header>
   );
 };
