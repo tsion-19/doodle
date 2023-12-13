@@ -131,7 +131,7 @@ const AllMeetings = ({ data }) => {
           )
           .map((meeting) => (
             <Link
-              to={`/manage?id=${meeting.id}`}
+              to={`/user?id=${meeting.id}`}
               style={{ textDecoration: "inherit", color: "inherit" }}
             >
               <div className="card_meeting">
