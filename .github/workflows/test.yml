@@ -3,9 +3,9 @@ name: Continuous Integration Workflow
 on:
     workflow_dispatch:
     pull_request:
-        branches: ["group_1", "group_2", "main"]
+        branches: ["main"]
     push:
-        branches: ["group_2"]
+        branches: ["main"]
 
 defaults:
   run:
@@ -28,7 +28,7 @@ jobs:
                 
             - name: npm ci
               working-directory: doodle_django/doodle_react
-              run: npm ci
+              run: npm ci --legacy-peer-deps
 
             - uses: actions/setup-python@v3
             - name: Install Django dependencies
