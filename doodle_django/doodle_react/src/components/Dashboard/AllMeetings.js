@@ -127,12 +127,7 @@ const AllMeetings = ({ data }) => {
           .map((meeting) => (
             <Link
               to={`/user?id=${meeting.id}`}
-<<<<<<< HEAD
-              style={{ textDecoration: "inherit", color: "inherit" }}
-            >
-=======
               style={{ textDecoration: "inherit", color: "inherit" }}>
->>>>>>> 63f05e94ed61439ef7ba247a2af7cfd641c5b247
               <div className="card_meeting">
                 <Grid container spacing={2}>
                   <Grid
