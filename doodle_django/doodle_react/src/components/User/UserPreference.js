@@ -4,18 +4,13 @@ import videoImage from "../images/video.png";
 import descriptionImage from "../images/description.png";
 import correctImage from "../images/correct.png";
 import noImage from "../images/no.png";
-import waitImage from "../images/wait.png";
 import maybeImage from "../images/maybe.png";
 import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
-import * as React from "react";
-// import  { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import "../ManageMeeting/manage.css";
-import axios from "axios";
 
 const UserPreference = ({ data }) => {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -46,7 +41,7 @@ const UserPreference = ({ data }) => {
           <Grid item xs={6}>
             <>
             
-      <div className="organizer-info" style={{  alignItems: 'center' }}>
+      {/* <div className="organizer-info" style={{  alignItems: 'center' }}>
   <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
     <Avatar sx={{ bgcolor: 'grey' }}>D</Avatar>
     <div style={{ marginLeft: '8px' }}>
@@ -57,7 +52,7 @@ const UserPreference = ({ data }) => {
   <div style={{ display: 'flex', flexDirection: 'column' }}>
     <p style={{ margin: 0 }}>is organizing</p>
   </div>
-  </div>  
+  </div>   */}
 
               <h2>{data["title"]}</h2>
               <div className="manage_div_info">
@@ -106,10 +101,6 @@ const UserPreference = ({ data }) => {
                   <nobr className="manage_nobr_info">
                     <img src={noImage} alt="no.png" />
                     <nobr>No</nobr>
-                  </nobr>
-                  <nobr className="manage_nobr_info">
-                    <img src={waitImage} alt="wait.png" />
-                    <nobr>Wait</nobr>
                   </nobr>
                 </div>
               </Grid>

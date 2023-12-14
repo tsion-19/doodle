@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import "../CreationMeeting/createGroup.css";
@@ -9,6 +8,7 @@ import "../ManageMeeting/manage.css";
 import UserPreference from "../User/UserPreference";
 import News from "../CreationMeeting/News";
 import TableMeetingUser from "../User/TableMeetingUser";
+import VotedPage from './VotedPage';
 import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
@@ -24,42 +24,16 @@ const User = ({ news, data }) => {
   }));
 
   const getToken = () => sessionStorage.getItem("token");
-
-  // const submitForm = async () => {
-  //   let variable = null;
-  //   console.log("selected", selectedColumn);
-  //   if (selectedColumn !== "")
-  //     variable = data["timeslots"][selectedColumn - 1]["id"];
-
-  //   try {
-  //     await axios.post(
-  //       "http://127.0.0.1:8000/api/meeting/" + data["id"] + "/book/",
-  //       {
-  //         final_date: variable,
-  //       },
-  //       {
-  //         headers: {
-  //           authorization: `Token ${getToken()}`,
-  //         },
-  //       }
-  //     );
-  //     alert("Timeslot booked!");
-  //     window.location.reload();
-  //   } catch (e) {
-  //     // console.log("sth failed", e);
-  //   }
-  // };
-
+const [submitsucess,setSubmitSucess]=useState(false)
   const [selectedColumn, setSelectedColumn] = useState([]);
+  const [checkboxValues, setCheckboxValues] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([]);
 
   useEffect(() => {
-    // console.log("qua");
     if (data["final_date"] !== null && data["timeslots"]) {
       for (let i = 0; i < data["timeslots"].length; ++i) {
-        // console.log("index ", i, data["final_date"]);
         if (data["final_date"] === data["timeslots"][i]["id"]) {
           setSelectedColumn(i + 1);
-          // console.log(selectedColumn);
           return;
         }
       }
@@ -76,7 +50,10 @@ const User = ({ news, data }) => {
     }
   };
 
-  
+  const handleSubmit = async (value) => {
+    setSubmitSucess(value)
+  };
+
   return (
     <div className="CreateGroup">
       <Box sx={{ flexGrow: 1 }}>
@@ -86,31 +63,33 @@ const User = ({ news, data }) => {
           </Grid>
           <Grid style={{ marginTop: 32, paddingLeft: 0 }} item xs={8}>
             <div className="field">
-              {/* Box to hold UserPreference and TableMeetingUser side by side */}
               <Box sx={{ display: "flex" }}>
-                {/* UserPreference Component */}
-                <UserPreference data={data} />
-
-                {/* Vertical Divider */}
+                {!submitsucess && <UserPreference data={data} />}
                 <Divider orientation="vertical" flexItem style={{ margin: "0 16px" }} />
-
-                {/* TableMeetingUser Component */}
-                <TableMeetingUser
+                {/* Pass the callback function and states to TableMeetingUser */}
+                {!submitsucess && <TableMeetingUser
+                  onSubmit={handleSubmit}
                   data={data}
                   selectedColumn={selectedColumn}
                   columnSelection={columnSelection}
-                />
+                  checkboxValues={checkboxValues}
+                  setCheckboxValues={setCheckboxValues}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                />}
+                {submitsucess && <h2>Your vote has been counted successfully!</h2>
+}
               </Box>
-
-              {/* <div style={{ textAlign: "end" }}>
-                <ColorButton
+              <div style={{ textAlign: "end" }}>
+                {/* Use the handleSubmit function from props */}
+                {/* <ColorButton
                   style={{ margin: 20, textAlign: "end" }}
-                  onClick={submitForm}
+                  onClick={handleSubmit}
                   variant="contained"
                 >
-                  Submit
-                </ColorButton>
-              </div> */}
+                </ColorButton> */}
+                
+              </div>
             </div>
           </Grid>
           <Grid className="dx_news" item xs={2}>
